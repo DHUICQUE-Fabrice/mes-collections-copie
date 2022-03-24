@@ -59,13 +59,6 @@ class PetshopsController extends AbstractController
      */
     public function show(Petshop $petshop): Response
     {
-        /*$currentSlug = $petshop->getSlug();
-        if($currentSlug !== $slug) {
-            return $this->redirectToRoute('petshop_details', [
-                'id' => $petshop->getId(),
-                'slug' => $currentSlug
-            ], 301);
-        }*/
         return $this->render('petshops/details.html.twig', [
             'petshop' => $petshop
         ]);
@@ -80,7 +73,9 @@ class PetshopsController extends AbstractController
      * @return Response
      * @throws ORMException
      */
-    public function new(EntityManagerInterface $entityManager, Request $request, AlertServiceInterface $alertService): Response
+    public function new(EntityManagerInterface $entityManager,
+                        Request $request,
+                        AlertServiceInterface $alertService): Response
     {
         $petshop = new Petshop();
 
@@ -144,18 +139,17 @@ class PetshopsController extends AbstractController
      * @param PetshopRepository $petshopRepository
      * @return Response
      */
-    public function delete(int                    $id,
-                                  EntityManagerInterface $entityManager,
-                                  PetshopRepository      $petshopRepository): Response
+    public function delete(int $id,
+                          EntityManagerInterface $entityManager,
+                          PetshopRepository      $petshopRepository): Response
     {
         $petshop = $petshopRepository->find($id);
+        /** @var $user User */
+        $user = $this->getUser();
         $this->denyAccessUnlessGranted('delete', $petshop);
-        $image = $petshop->getImageFile();
-        $petshop->setImageFile(null);
-        $entityManager->remove($image);
         $entityManager->remove($petshop);
         $entityManager->flush();
-        return $this->redirectToRoute('profile', ['nickname' => $petshop->getUser()->getNickName()]);
+        return $this->redirectToRoute('profile', ['nickname' => $user->getNickName()]);
     }
 
 }

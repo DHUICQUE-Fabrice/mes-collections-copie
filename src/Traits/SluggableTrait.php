@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 trait SluggableTrait
 {
     /**
-     * @Gedmo\Slug(fields={"createdAt", "name"}, style="default", separator="-", updatable=true, unique=true, dateFormat="d/m/Y H-i-s")
+     * @Gedmo\Slug(fields={"name", "createdAt"}, style="default", separator="-", updatable=true, unique=true, dateFormat="His")
      * @ORM\Column(length=128, unique=true)
      */
     private ?string $slug = null;

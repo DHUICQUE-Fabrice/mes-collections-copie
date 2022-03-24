@@ -34,9 +34,9 @@ class Petshop extends AbstractImageFile
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @var string
+     * @var string|null
      */
-    private string $biography;
+    private ?string $biography;
 
     /**
      * @ORM\ManyToOne(targetEntity=PetshopSize::class, inversedBy="petshops")
@@ -91,7 +91,7 @@ class Petshop extends AbstractImageFile
      * @param $name
      * @return $this
      */
-    public function setName($name): Petshop
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -99,9 +99,9 @@ class Petshop extends AbstractImageFile
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBiography(): string
+    public function getBiography(): ?string
     {
         return $this->biography;
     }
@@ -110,7 +110,7 @@ class Petshop extends AbstractImageFile
      * @param $biography
      * @return $this
      */
-    public function setBiography($biography): Petshop
+    public function setBiography($biography): self
     {
         $this->biography = $biography;
 
@@ -129,7 +129,7 @@ class Petshop extends AbstractImageFile
      * @param $size
      * @return $this
      */
-    public function setSize($size): Petshop
+    public function setSize($size): self
     {
         $this->size = $size;
 
@@ -148,7 +148,7 @@ class Petshop extends AbstractImageFile
      * @param $species
      * @return $this
      */
-    public function setSpecies($species): Petshop
+    public function setSpecies($species): self
     {
         $this->species = $species;
 
@@ -167,7 +167,7 @@ class Petshop extends AbstractImageFile
      * @param $user
      * @return $this
      */
-    public function setUser($user): Petshop
+    public function setUser($user): self
     {
         $this->user = $user;
 

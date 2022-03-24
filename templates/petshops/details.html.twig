@@ -6,7 +6,6 @@
     {% if app.user == petshop.user %}
         <a href="{{ path('edit_petshop', {id: petshop.id}) }}" class="btn btn-primary">Modifier {{ petshop.name }}</a>
     {% endif %}
-    
     <div class="card-flyer">
         <div class="text-box">
             <div class="image-box">

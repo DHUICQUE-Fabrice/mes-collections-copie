@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SchleichRepository;
+use App\Traits\SluggableTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
@@ -11,10 +12,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=SchleichRepository::class)
- * @Vich\Uploadable()
+ * @Vich\Uploadable
  */
 class HorseSchleich extends AbstractImageFile
 {
+
+    use SluggableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -30,9 +34,9 @@ class HorseSchleich extends AbstractImageFile
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @var string
+     * @var string|null
      */
-    private string $biography;
+    private ?string $biography;
 
     /**
      * @ORM\ManyToOne(targetEntity=HorseType::class, inversedBy="horseSchleiches")
@@ -72,7 +76,7 @@ class HorseSchleich extends AbstractImageFile
      * @Vich\UploadableField(mapping="uploaded_images", fileNameProperty="imageName")
      * @var File|null
      */
-    protected ?File $file;
+    protected ?File $file = null;
 
     /**
      * @return int|null
@@ -94,7 +98,7 @@ class HorseSchleich extends AbstractImageFile
      * @param $name
      * @return $this
      */
-    public function setName($name): HorseSchleich
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -102,9 +106,9 @@ class HorseSchleich extends AbstractImageFile
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBiography(): string
+    public function getBiography(): ?string
     {
         return $this->biography;
     }
@@ -113,7 +117,7 @@ class HorseSchleich extends AbstractImageFile
      * @param $biography
      * @return $this
      */
-    public function setBiography($biography): HorseSchleich
+    public function setBiography($biography): self
     {
         $this->biography = $biography;
 
@@ -132,7 +136,7 @@ class HorseSchleich extends AbstractImageFile
      * @param $type
      * @return $this
      */
-    public function setType($type): HorseSchleich
+    public function setType($type): self
     {
         $this->type = $type;
 
@@ -151,7 +155,7 @@ class HorseSchleich extends AbstractImageFile
      * @param $coat
      * @return $this
      */
-    public function setCoat($coat): HorseSchleich
+    public function setCoat($coat): self
     {
         $this->coat = $coat;
 
@@ -170,19 +174,11 @@ class HorseSchleich extends AbstractImageFile
      * @param $species
      * @return $this
      */
-    public function setSpecies($species): HorseSchleich
+    public function setSpecies($species): self
     {
         $this->species = $species;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlug(): string
-    {
-        return (new Slugify())->slugify($this->name);
     }
 
     /**
@@ -197,7 +193,7 @@ class HorseSchleich extends AbstractImageFile
      * @param $user
      * @return $this
      */
-    public function setUser($user): HorseSchleich
+    public function setUser($user): self
     {
         $this->user = $user;
 

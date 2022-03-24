@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\HorseCoatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,9 +28,9 @@ class HorseCoat
 
     /**
      * @ORM\OneToMany(targetEntity=HorseSchleich::class, mappedBy="coat")
-     * @var ArrayCollection
+     * @var Collection
      */
-    private ArrayCollection $horseSchleiches;
+    private Collection $horseSchleiches;
 
     public function __construct()
     {

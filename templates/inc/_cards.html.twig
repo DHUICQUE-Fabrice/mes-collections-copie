@@ -3,9 +3,7 @@
         <div class="card-flyer">
             <div class="text-box">
                 <div class="image-box">
-
-                    {{ dump(item.slug) }}
-                        {% if thisClass == "petshop" %}
+                     {% if thisClass == "petshop" %}
                             <a href="{{ path('petshop_details', {slug: item.slug}) }}" title="{{ item.name }}">
                                 {% if not item.imageName %}
                                     <img src="{{ asset('build/images/placeholder_petshop.png') }}" alt="{{ item.name }}" />

@@ -4,6 +4,7 @@ twig:
 
     globals:
         path_asset_petshop: '%uploaded_images%/'
+        path_asset_horse_schleich: '%uploaded_images%/'
         path_asset_image_profile: '%uploaded_images%/'
 
 when@test:

@@ -41,8 +41,7 @@ class PetshopType extends AbstractType
                 'required' => false,
                 'allow_delete' => false,
                 'download_link' => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

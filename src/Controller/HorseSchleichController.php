@@ -3,15 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\HorseSchleich;
+use App\Entity\ObjectFamily;
 use App\Entity\User;
 use App\Form\HorseSchleichType;
 use App\Repository\HorseSchleichRepository;
-use App\Repository\ObjectFamilyRepository;
+use App\Service\AlertServiceInterface;
 use App\Service\PaginatorService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,19 +48,12 @@ class HorseSchleichController extends AbstractController
     }
 
     /**
-     * @Route ("/schleich/details/{slug}-{id}", name="horse_schleich_details", requirements={"id"="\d+", "slug": "[a-z0-9\-]*"})
+     * @Route ("/schleich/details/{slug}", name="horse_schleich_details", requirements={"slug": "[a-z0-9\-]*"})
      * @param HorseSchleich $horseSchleich
      * @return Response
      */
-    public function details(HorseSchleich $horseSchleich, string $slug): Response
+    public function show(HorseSchleich $horseSchleich): Response
     {
-        $currentSlug = $horseSchleich->getSlug();
-        if($currentSlug !== $slug){
-            return $this->redirectToRoute('horse_schleich_details', [
-                'id' => $horseSchleich->getId(),
-                'slug' => $currentSlug
-            ], 301);
-        }
         return $this->render('horse_schleich/details.html.twig', [
             'schleich' => $horseSchleich
        ]);
@@ -70,30 +64,34 @@ class HorseSchleichController extends AbstractController
      * @Route("/nouveau/cheval-schleich", name="create_new_horseSchleich")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
-     * @param ObjectFamilyRepository $objectFamilyRepository
+     * @param AlertServiceInterface $alertService
      * @return Response
      */
     public function createNewHorseSchleich(EntityManagerInterface $entityManager,
                                            Request                $request,
-                                           ObjectFamilyRepository $objectFamilyRepository
+                                           AlertServiceInterface $alertService
     ): Response
     {
-        $user = $this->getUser();
-        $family = $objectFamilyRepository->findOneBy(['name'=>'HorseSchleich']);
-
         $horseSchleich = new HorseSchleich();
-        $horseSchleich->setUser($user)->setObjectFamily($family);
         $horseSchleichForm = $this->createForm(HorseSchleichType::class, $horseSchleich);
 
         $horseSchleichForm->handleRequest($request);
+
         if ($horseSchleichForm->isSubmitted() && $horseSchleichForm->isValid()){
-            $horseSchleich = new HorseSchleich();
-            $horseSchleich->setUser($user)
-                ->setObjectFamily($family);
+            /** @var $user User */
+            $user = $this->getUser();
+
+            $horseSchleich->setUser($user);
+
+            $family = $entityManager->getReference(ObjectFamily::class, ObjectFamily::CODE_HORSE_SCHLEICH);
+            $horseSchleich->setObjectFamily($family);
+
             $entityManager->persist($horseSchleich);
             $entityManager->flush();
-            $this->addFlash('success', $horseSchleich->getName() . ' a bien été ajouté !');
-            return $this->redirectToRoute('horse_schleich_details', ['id'=>$horseSchleich->getId(), 'slug'=>$horseSchleich->getSlug()]);
+
+            $alertService->success(sprintf('<b>%s</b> a bien été ajouté !', $horseSchleich->getName()));
+
+            return $this->redirectToRoute('horse_schleich_details', ['slug'=>$horseSchleich->getSlug()]);
         }
         return $this->render('create/horseschleich.html.twig', [
             'horseSchleichForm'=>$horseSchleichForm->createView()
@@ -106,7 +104,7 @@ class HorseSchleichController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @param HorseSchleichRepository $horseSchleichRepository
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
     public function editHorseSchleich(int                     $id, Request $request,
                                       EntityManagerInterface  $entityManager,
@@ -125,5 +123,23 @@ class HorseSchleichController extends AbstractController
         return $this->render('horse_schleich/edit.html.twig',[
             'horseSchleichForm' => $horseSchleichForm->createView()
         ]);
+    }
+
+    /**
+     * @Route ("/supprimer/schleich/{id}", name="delete-horse_schleich")
+     * @param int $id
+     * @param EntityManagerInterface $entityManager
+     * @param HorseSchleichRepository $horseSchleichRepository
+     * @return Response
+     */
+    public function delete(int $id, EntityManagerInterface $entityManager, HorseSchleichRepository $horseSchleichRepository): Response
+    {
+        $horseSchleich = $horseSchleichRepository->find($id);
+        /** @var $user User */
+        $user = $this->getUser();
+        $this->denyAccessUnlessGranted('delete', $horseSchleich);
+        $entityManager->remove($horseSchleich);
+        $entityManager->flush();
+        return $this->redirectToRoute('profile', ['nickname' => $user->getNickName()]);
     }
 }
