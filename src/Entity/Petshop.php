@@ -156,14 +156,6 @@ class Petshop extends AbstractImageFile
     }
 
     /**
-     * @return string
-     */
-    public function getSlug(): string
-    {
-        return (new Slugify())->slugify($this->name);
-    }
-
-    /**
      * @return User
      */
     public function getUser(): User

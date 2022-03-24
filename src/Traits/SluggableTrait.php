@@ -18,7 +18,6 @@ trait SluggableTrait
      */
     public function getSlug(): ?string
     {
-        dd($this->slug);
         return $this->slug;
     }
 
