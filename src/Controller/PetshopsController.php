@@ -2,16 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\ObjectFamily;
 use App\Entity\Petshop;
 use App\Entity\User;
 use App\Form\PetshopType;
 use App\Repository\ObjectFamilyRepository;
 use App\Repository\PetshopRepository;
+use App\Service\AlertServiceInterface;
 use App\Service\PaginatorService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\ORMException;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +26,6 @@ class PetshopsController extends AbstractController
      * @var PetshopRepository
      */
     private $repository;
-
 
     /**
      * @param PetshopRepository $petshopRepository
@@ -38,10 +41,11 @@ class PetshopsController extends AbstractController
      * @param PaginatorInterface $paginator
      * @return Response
      */
-    public function allPetshops(Request $request, PaginatorInterface $paginator): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
         $paginatorSvc = new PaginatorService();
-        $petshops = $paginatorSvc->paginate($this->repository,$paginator,$request);
+        $petshops = $paginatorSvc->paginate($this->repository, $paginator,$request);
+
         return $this->render('petshops/all.html.twig', [
             'petshops' => $petshops,
         ]);
@@ -49,20 +53,19 @@ class PetshopsController extends AbstractController
 
 
     /**
-     * @Route ("/petshop/details/{slug}-{id}", name="petshop_details", requirements={"id"="\d+", "slug": "[a-z0-9\-]*"})
+     * @Route ("/petshop/details/{slug}", name="petshop_details", requirements={"slug": "[a-z0-9\-]*"})
      * @param Petshop $petshop
-     * @param string $slug
      * @return Response
      */
-    public function details(Petshop $petshop, string $slug): Response
+    public function show(Petshop $petshop): Response
     {
-        $currentSlug = $petshop->getSlug();
+        /*$currentSlug = $petshop->getSlug();
         if($currentSlug !== $slug) {
             return $this->redirectToRoute('petshop_details', [
                 'id' => $petshop->getId(),
                 'slug' => $currentSlug
             ], 301);
-        }
+        }*/
         return $this->render('petshops/details.html.twig', [
             'petshop' => $petshop
         ]);
@@ -73,32 +76,36 @@ class PetshopsController extends AbstractController
      * @Route("/nouveau/petshop", name="create_new_petshop")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
-     * @param ObjectFamilyRepository $objectFamilyRepository
+     * @param AlertServiceInterface $alertService
      * @return Response
+     * @throws ORMException
      */
-    public function createNewPetshop(EntityManagerInterface $entityManager,
-                                     Request                $request,
-                                     ObjectFamilyRepository $objectFamilyRepository
-    ): Response
+    public function new(EntityManagerInterface $entityManager, Request $request, AlertServiceInterface $alertService): Response
     {
-        /** @var $user User */
-        $user = $this->getUser();
-        $family = $objectFamilyRepository->findOneBy(['name'=>'Petshop']);
         $petshop = new Petshop();
-        $petshop->setUser($user)
-            ->setObjectFamily($family);
 
-        $petshopForm = $this->createForm(PetshopType::class, $petshop);
+        $form = $this->createForm(PetshopType::class, $petshop);
+        $form->handleRequest($request);
 
-        $petshopForm->handleRequest($request);
-        if ($petshopForm->isSubmitted() && $petshopForm->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var $user User */
+            $user = $this->getUser();
+
+            $petshop->setUser($user);
+
+            $family = $entityManager->getReference(ObjectFamily::class, ObjectFamily::CODE_PETSHOP);
+            $petshop->setObjectFamily($family);
+
             $entityManager->persist($petshop);
             $entityManager->flush();
-            $this->addFlash('success', $petshop->getName() . ' a bien été ajouté !');
-            return $this->redirectToRoute('petshop_details', ['id'=>$petshop->getId(), 'slug'=>$petshop->getSlug()]);
+
+            $alertService->success(sprintf('<b>%s</b> a bien été ajouté !', $petshop->getName()));
+
+            return $this->redirectToRoute('petshop_details', ['slug'=>$petshop->getSlug()]);
         }
+
         return $this->render('create/petshop.html.twig', [
-            'petshopForm'=>$petshopForm->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -109,9 +116,9 @@ class PetshopsController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @param PetshopRepository $petshopRepository
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
-    public function editPetshop(int                    $id, Request $request,
+    public function edit(int                    $id, Request $request,
                                 EntityManagerInterface $entityManager,
                                 PetshopRepository      $petshopRepository){
         $petshop = $petshopRepository->find($id);
@@ -137,7 +144,7 @@ class PetshopsController extends AbstractController
      * @param PetshopRepository $petshopRepository
      * @return Response
      */
-    public function deletePetshop(int                    $id,
+    public function delete(int                    $id,
                                   EntityManagerInterface $entityManager,
                                   PetshopRepository      $petshopRepository): Response
     {

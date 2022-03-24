@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\ImageFile;
+use App\Entity\AbstractImageFile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,8 +13,8 @@ class ImageFileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('imageFile', VichImageType::class, [
-                'label'=>'Veuillez ajouter une photo (facultatif, maximum 2Mb)',
+            ->add('file', VichImageType::class, [
+                'label'=>'Veuillez ajouter une photo (facultatif, maximum 2Mo)',
                 'required' => false,
                 'allow_delete' => false,
                 'download_link' => false,
@@ -25,7 +25,7 @@ class ImageFileType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ImageFile::class,
+            'data_class' => AbstractImageFile::class,
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PetshopSpeciesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,9 +28,8 @@ class PetshopSpecies
 
     /**
      * @ORM\OneToMany(targetEntity=Petshop::class, mappedBy="species")
-     * @var ArrayCollection
      */
-    private ArrayCollection $petshops;
+    private Collection $petshops;
 
     public function __construct()
     {
@@ -66,7 +66,7 @@ class PetshopSpecies
     /**
      * @return ArrayCollection
      */
-    public function getPetshops(): ArrayCollection
+    public function getPetshops(): Collection
     {
         return $this->petshops;
     }

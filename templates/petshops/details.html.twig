@@ -4,17 +4,16 @@
 {% endblock %}
 {% block body %}
     {% if app.user == petshop.user %}
-        <form action="{{ path('edit_petshop', {id: petshop.id}) }}">
-            <button type="submit" name="edit" class="btn btn-primary">Modifier {{ petshop.name }}</button>
-        </form>
+        <a href="{{ path('edit_petshop', {id: petshop.id}) }}" class="btn btn-primary">Modifier {{ petshop.name }}</a>
     {% endif %}
+    
     <div class="card-flyer">
         <div class="text-box">
             <div class="image-box">
-                {% if petshop.imageFile %}
-                <img src="{{ vich_uploader_asset(petshop.imageFile, 'imageFile') }}" alt="{{ petshop.name }}" width="250"/>
+                {% if petshop.imageName %}
+                    <img src="{{ path_asset_petshop ~ petshop.imageName }}" alt="{{ petshop.name }}" width="250"/>
                 {% else %}
-                <img src="{{ asset('/uploads/images/placeholder_petshop.png')}}" alt="{{ petshop.name }}" width="250"/>
+                    <img src="{{ asset('build/images/placeholder_petshop.png') }}" alt="{{ petshop.name }}" width="250"/>
                 {% endif %}
             </div>
             <div class="text-container">

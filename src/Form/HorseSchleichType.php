@@ -40,7 +40,8 @@ class HorseSchleichType extends AbstractType
                 'choice_label'=>'name',
                 'label'=>'Race : ',
                 'placeholder'=>'Sélectionnez'
-            ])->add('imageFile', ImageFileType::class)
+            ])
+            ->add('file', ImageFileType::class)
         ;
     }
 

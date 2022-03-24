@@ -3,24 +3,30 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Serializable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use function unserialize;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"nickname"}, message="Ce pseudo est déjà utilisé par un autre utilisateur !")
- * @Vich\Uploadable()
  */
-class User extends ImageFile implements UserInterface, PasswordAuthenticatedUserInterface, Serializable
+class User implements UserInterface, PasswordAuthenticatedUserInterface, Serializable
 {
+    use TimestampableEntity;
+
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -55,26 +61,31 @@ class User extends ImageFile implements UserInterface, PasswordAuthenticatedUser
 
     /**
      * @ORM\OneToMany(targetEntity=Petshop::class, mappedBy="user")
-     * @var ArrayCollection
      */
-    private ArrayCollection $petshops;
+    private Collection $petshops;
 
     /**
      * @ORM\OneToMany(targetEntity=HorseSchleich::class, mappedBy="user")
-     * @var ArrayCollection
      */
-    private ArrayCollection $horseSchleiches;
+    private Collection $horseSchleiches;
 
     /**
-     * @Vich\UploadableField(mapping="uploaded_images", fileNameProperty="imageName")
-     * @var File|null
+     * @ORM\OneToOne(targetEntity=UserProfileImage::class, cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    protected ?File $imageFile;
+    private ?UserProfileImage $userProfileImage;
 
     public function __construct()
     {
         $this->petshops = new ArrayCollection();
         $this->horseSchleiches = new ArrayCollection();
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**
@@ -196,18 +207,18 @@ class User extends ImageFile implements UserInterface, PasswordAuthenticatedUser
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAbout(): string
+    public function getAbout(): ?string
     {
         return $this->about;
     }
 
     /**
-     * @param $about
+     * @param $about|null
      * @return $this
      */
-    public function setAbout($about): User
+    public function setAbout(?string $about): self
     {
         $this->about = $about;
 
@@ -215,9 +226,9 @@ class User extends ImageFile implements UserInterface, PasswordAuthenticatedUser
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getPetshops(): ArrayCollection
+    public function getPetshops(): Collection
     {
         return $this->petshops;
     }
@@ -251,9 +262,9 @@ class User extends ImageFile implements UserInterface, PasswordAuthenticatedUser
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getHorseSchleiches(): ArrayCollection
+    public function getHorseSchleiches(): Collection
     {
         return $this->horseSchleiches;
     }
@@ -304,11 +315,8 @@ class User extends ImageFile implements UserInterface, PasswordAuthenticatedUser
             $this->nickname,
             $this->email,
             $this->password,
-            $this->about,
-            $this->roles,
-            $this->petshops,
-            $this->horseSchleiches
-        ]);    }
+        ]);
+    }
 
     /**
      * @param $data
@@ -321,28 +329,18 @@ class User extends ImageFile implements UserInterface, PasswordAuthenticatedUser
             $this->nickname,
             $this->email,
             $this->password,
-            $this->about,
-            $this->roles,
-            $this->petshops,
-            $this->horseSchleiches
         ] = unserialize($data, [self::class]);
     }
 
-    /**
-     * @return File|null
-     */
-    public function getImageFile(): ?File
+    public function getUserProfileImage(): ?UserProfileImage
     {
-        return $this->imageFile;
+        return $this->userProfileImage;
     }
 
-    /**
-     * @param File|null $imageFile
-     */
-    public function setImageFile(?File $imageFile): void
+    public function setUserProfileImage(?UserProfileImage $userProfileImage): self
     {
-        $this->imageFile = $imageFile;
-        if ($imageFile !== null)
-            $this->updatedAt = new DateTime();
+        $this->userProfileImage = $userProfileImage;
+
+        return $this;
     }
 }

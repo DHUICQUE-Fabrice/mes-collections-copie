@@ -3,41 +3,37 @@
 namespace App\Entity;
 
 use App\Repository\ObjectFamilyRepository;
+use App\Traits\ReferentialTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity(repositoryClass=ObjectFamilyRepository::class)
  */
 class ObjectFamily
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     * @var int
-     */
-    private int $id;
+    public const CODE_PETSHOP = 'PET';
+    public const CODE_HORSE_SCHLEICH = 'HOR';
+
+    use ReferentialTrait;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @var string
+     * @ORM\Id
+     * @ORM\Column(type="string", length=50)
+     * @var string|null
      */
-    private string $name;
+    private ?string $code = null;
 
     /**
      * @ORM\OneToMany(targetEntity=Petshop::class, mappedBy="objectFamily")
-     * @var ArrayCollection
      */
-    private ArrayCollection $petshop;
+    private Collection $petshop;
 
     /**
      * @ORM\OneToMany(targetEntity=HorseSchleich::class, mappedBy="objectFamily")
-     * @var ArrayCollection
      */
-    private ArrayCollection $horseSchleich;
+    private Collection $horseSchleich;
 
     public function __construct()
     {
@@ -46,36 +42,28 @@ class ObjectFamily
     }
 
     /**
-     * @return int
+     * @return string|null
      */
-    public function getId(): int
+    public function getCode(): ?string
     {
-        return $this->id;
+        return $this->code;
     }
 
     /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $name
+     * @param string|null $code
      * @return $this
      */
-    public function setName($name): ObjectFamily
+    public function setCode(?string $code): self
     {
-        $this->name = $name;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getPetshop(): ArrayCollection
+    public function getPetshop(): Collection
     {
         return $this->petshop;
     }
@@ -108,9 +96,9 @@ class ObjectFamily
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getHorseSchleich(): ArrayCollection
+    public function getHorseSchleich(): Collection
     {
         return $this->horseSchleich;
     }

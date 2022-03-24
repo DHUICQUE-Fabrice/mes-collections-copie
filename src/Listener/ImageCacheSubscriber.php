@@ -2,7 +2,7 @@
 
 namespace App\Listener;
 
-use App\Entity\ImageFile;
+use App\Entity\AbstractImageFile;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -34,7 +34,7 @@ class ImageCacheSubscriber implements EventSubscriber
         $entity = $args->getEntity();
 
 
-        if(!$entity instanceof ImageFile){
+        if(!$entity instanceof AbstractImageFile){
             return;
         }
         if ($entity->getImageFile() instanceof UploadedFile){
@@ -44,7 +44,7 @@ class ImageCacheSubscriber implements EventSubscriber
 
     public function preUpdate(PreUpdateEventArgs $args){
         $entity = $args->getEntity();
-        if(!$entity instanceof ImageFile){
+        if(!$entity instanceof AbstractImageFile){
             return;
         }
         if ($entity->getImageFile() instanceof UploadedFile){

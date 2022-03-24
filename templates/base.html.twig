@@ -11,20 +11,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro&family=Noto+Sans&display=swap" rel="stylesheet">
-    {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+
     <meta name="google-site-verification" content="8yosMUkg4oox9P861cK6cdTE_h1aP5jPJR3dfYl2wz4" />
 </head>
 <body>
-{% block header %}{% include 'inc/_header.html.twig' %}{% endblock %}
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success">{{ message }}</div>
-{% endfor %}
-{% block body %}
-    <div class="container text-center"><h1>Site en cours de construction</h1></div>
-{% endblock %}
-<footer>
-{% block footer %}{% include 'inc/_footer.html.twig' %}{% endblock %}
-</footer>
-{% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+    {% include 'inc/_header.html.twig' %}
+
+    <div class="container-fluid">
+        {{ include('_flash_message.html.twig') }}
+        {% block body %}
+            <div class="container text-center"><h1>Site en cours de construction</h1></div>
+        {% endblock %}
+    </div>
+
+    {% include 'inc/_footer.html.twig' %}
 </body>
 </html>

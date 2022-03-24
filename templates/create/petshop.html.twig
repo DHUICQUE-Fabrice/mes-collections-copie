@@ -5,20 +5,15 @@
 
 {% block body %}
     <div class="container">
-
-        {{ form_start(petshopForm) }}
-
-        {{ form_widget(petshopForm) }}
-        <br>
-        <div class="row">
-            <div class="col-4"></div>
-            <div class="col-4">
-                <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
+                </div>
             </div>
-
-        </div>
-        {{ form_end(petshopForm) }}
-
+        {{ form_end(form) }}
     </div>
 {% endblock %}
 

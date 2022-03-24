@@ -38,7 +38,7 @@ class RegistrationController extends AbstractController
     ): Response
     {
         $user = new User();
-        $user->setRegisteredAt(new \DateTime());
+        //$user->setRegisteredAt(new \DateTime());
         $user->setRoles(['ROLE_USER']);
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);

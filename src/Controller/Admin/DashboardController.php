@@ -6,7 +6,7 @@ use App\Entity\HorseCoat;
 use App\Entity\HorseSchleich;
 use App\Entity\HorseSpecies;
 use App\Entity\HorseType;
-use App\Entity\ImageFile;
+use App\Entity\AbstractImageFile;
 use App\Entity\ObjectFamily;
 use App\Entity\Petshop;
 use App\Entity\PetshopSize;
@@ -66,6 +66,6 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Users', 'fas fa-users');
         yield MenuItem::linkToCrud('Registered Users', null, User::class);
-        yield MenuItem::linkToCrud('Image Files', null, ImageFile::class);
+        yield MenuItem::linkToCrud('Image Files', null, AbstractImageFile::class);
     }
 }

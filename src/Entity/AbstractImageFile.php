@@ -7,16 +7,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 
-abstract class ImageFile
+abstract class AbstractImageFile
 {
 
     use TimestampableEntity;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string|null
      */
-    protected ?string $imageName;
+    protected ?string $imageName = null;
 
     protected ?File $file;
 

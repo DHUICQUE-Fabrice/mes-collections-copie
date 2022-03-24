@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\ImageFile;
+use App\Entity\AbstractImageFile;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -17,7 +17,7 @@ class ImageFileCrudController extends AbstractCrudController
      */
     public static function getEntityFqcn(): string
     {
-        return ImageFile::class;
+        return AbstractImageFile::class;
     }
 
 

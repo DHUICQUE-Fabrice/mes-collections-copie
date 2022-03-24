@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\ImageFile;
+use App\Entity\AbstractImageFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ImageFile|null find($id, $lockMode = null, $lockVersion = null)
- * @method ImageFile|null findOneBy(array $criteria, array $orderBy = null)
- * @method ImageFile[]    findAll()
- * @method ImageFile[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AbstractImageFile|null find($id, $lockMode = null, $lockVersion = null)
+ * @method AbstractImageFile|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AbstractImageFile[]    findAll()
+ * @method AbstractImageFile[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ImageFileRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ImageFile::class);
+        parent::__construct($registry, AbstractImageFile::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(ImageFile $entity, bool $flush = true): void
+    public function add(AbstractImageFile $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,7 +37,7 @@ class ImageFileRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(ImageFile $entity, bool $flush = true): void
+    public function remove(AbstractImageFile $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -46,7 +46,7 @@ class ImageFileRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return ImageFile[] Returns an array of ImageFile objects
+    //  * @return AbstractImageFile[] Returns an array of AbstractImageFile objects
     //  */
     /*
     public function findByExampleField($value)
@@ -63,7 +63,7 @@ class ImageFileRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ImageFile
+    public function findOneBySomeField($value): ?AbstractImageFile
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.exampleField = :val')

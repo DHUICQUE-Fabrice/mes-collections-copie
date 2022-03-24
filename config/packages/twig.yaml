@@ -2,6 +2,10 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     form_themes: ['bootstrap_4_layout.html.twig']
 
+    globals:
+        path_asset_petshop: '%uploaded_images%/'
+        path_asset_image_profile: '%uploaded_images%/'
+
 when@test:
     twig:
         strict_variables: true

@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  db:
+    image: 'mysql:5.6'
+    environment:
+      - 'MYSQL_ROOT_PASSWORD=toor'
+      - 'MYSQL_DATABASE=mes-collection'
+      - 'MYSQL_USER=mes-collection'
+      - 'MYSQL_PASSWORD=mes-collection'
+    ports:
+      - '3306:3306'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8585:80'
+    depends_on:
+      - db
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - '1025:1025'
+      - '8025:8025'

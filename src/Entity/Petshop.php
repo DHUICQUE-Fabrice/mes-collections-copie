@@ -3,18 +3,28 @@
 namespace App\Entity;
 
 use App\Repository\PetshopRepository;
+use App\Traits\SluggableTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=PetshopRepository::class)
- * @Vich\Uploadable()
+ * @Vich\Uploadable
  */
-class Petshop extends ImageFile
+class Petshop extends AbstractImageFile
 {
+    use SluggableTrait;
+
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -51,16 +61,23 @@ class Petshop extends ImageFile
 
     /**
      * @ORM\ManyToOne(targetEntity=ObjectFamily::class, inversedBy="petshop")
-     * @ORM\JoinColumn(nullable=false)
-     * @var ObjectFamily
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="code", name="object_family_code")
      */
-    private ObjectFamily $objectFamily;
+    private ?ObjectFamily $objectFamily = null;
 
     /**
      * @Vich\UploadableField(mapping="uploaded_images", fileNameProperty="imageName")
      * @var File|null
      */
-    protected ?File $imageFile;
+    protected ?File $file = null;
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     /**
      * @return string
@@ -174,10 +191,10 @@ class Petshop extends ImageFile
     }
 
     /**
-     * @param $objectFamily
+     * @param ObjectFamily|null $objectFamily
      * @return $this
      */
-    public function setObjectFamily($objectFamily): self
+    public function setObjectFamily(?ObjectFamily $objectFamily): self
     {
         $this->objectFamily = $objectFamily;
 
@@ -191,23 +208,4 @@ class Petshop extends ImageFile
     {
         return $this->getName();
     }
-
-    /**
-     * @return File|null
-     */
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    /**
-     * @param File|null $imageFile
-     */
-    public function setImageFile(?File $imageFile): void
-    {
-        $this->imageFile = $imageFile;
-        if ($imageFile !== null)
-            $this->updatedAt = new DateTime();
-    }
-
 }

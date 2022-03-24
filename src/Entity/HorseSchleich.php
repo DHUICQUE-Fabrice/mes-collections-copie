@@ -13,8 +13,14 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass=SchleichRepository::class)
  * @Vich\Uploadable()
  */
-class HorseSchleich extends ImageFile
+class HorseSchleich extends AbstractImageFile
 {
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -58,16 +64,23 @@ class HorseSchleich extends ImageFile
 
     /**
      * @ORM\ManyToOne(targetEntity=ObjectFamily::class, inversedBy="horseSchleich")
-     * @ORM\JoinColumn(nullable=false)
-     * @var ObjectFamily
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="code", name="object_family_code")
      */
-    private ObjectFamily $objectFamily;
+    private ?ObjectFamily $objectFamily = null;
 
     /**
      * @Vich\UploadableField(mapping="uploaded_images", fileNameProperty="imageName")
      * @var File|null
      */
-    protected ?File $imageFile;
+    protected ?File $file;
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     /**
      * @return string
@@ -200,10 +213,10 @@ class HorseSchleich extends ImageFile
     }
 
     /**
-     * @param $objectFamily
+     * @param ObjectFamily|null $objectFamily
      * @return $this
      */
-    public function setObjectFamily($objectFamily): HorseSchleich
+    public function setObjectFamily(?ObjectFamily $objectFamily): self
     {
         $this->objectFamily = $objectFamily;
 
@@ -217,23 +230,4 @@ class HorseSchleich extends ImageFile
     {
         return $this->getName();
     }
-
-    /**
-     * @return File|null
-     */
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    /**
-     * @param File|null $imageFile
-     */
-    public function setImageFile(?File $imageFile): void
-    {
-        $this->imageFile = $imageFile;
-        if ($imageFile !== null)
-            $this->updatedAt = new DateTime();
-    }
-
 }
