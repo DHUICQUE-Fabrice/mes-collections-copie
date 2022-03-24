@@ -2,24 +2,15 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\HttpFoundation\File\File;
 
-/**
- * TimestampableEntity()
- */
 abstract class ImageFile
 {
 
     use TimestampableEntity;
-
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     * @var int
-     */
-    protected int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -27,13 +18,7 @@ abstract class ImageFile
      */
     protected ?string $imageName;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+    protected ?File $file;
 
     /**
      * @return string|null
@@ -50,6 +35,29 @@ abstract class ImageFile
     public function setImageName(string $imageName): self
     {
         $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param File|null $file
+     * @return $this
+     */
+    public function setFile(?File $file = null): self
+    {
+        $this->file = $file;
+
+        if (null !== $file) {
+            $this->updatedAt = new DateTimeImmutable();
+        }
 
         return $this;
     }
