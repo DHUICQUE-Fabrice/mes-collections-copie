@@ -1,25 +1,25 @@
 {% extends 'base.html.twig' %}
 {% block title  %}
-    {{ parent() }} | {{ user.nickname }}
+    {{ parent() }} | {{ user.name }}
 {% endblock %}
 {% block body %}
     <div class="container">
     {% if app.user == user %}
-        <form action="{{ path('editProfile', {nickname: user.nickname}) }}">
+        <form action="{{ path('editProfile', {name: user.name}) }}">
             <button type="submit" name="edit" class="btn btn-primary">Modifier mon profil</button>
         </form>
     {% endif %}
 
-        {% if user.userProfileImage != null %}
-            <img src="{{  asset(path_asset_image_profile ~ user.userProfileImage.imageName) }} }}" alt="{{ user.nickname }}" title="{{ user.nickname }}" width="250">
+        {% if user.imageName %}
+            <img src="{{ path_asset_image_profile ~ user.imageName }}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
         {% else %}
-            <img src="{{ asset('build/images/placeholder_avatar.png')}}" alt="{{ user.nickname }}" title="{{ user.nickname }}" width="250">
+            <img src="{{ asset('build/images/placeholder_avatar.png')}}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
         {% endif %}
 
         {% if user.about %}
         <p class="text-black text-center">{{ user.about }}</p>
     {% endif %}
-    <p class="text-center text-black">{{ user.nickname }} est membre depuis le {{ user.createdAt | date('d/m/Y')}}, il a {{ user.petshops.count }} petshops et {{ user.horseSchleiches.count }} chevaux Schleich, les voici :</p>
+    <p class="text-center text-black">{{ user.name }} est membre depuis le {{ user.createdAt | date('d/m/Y')}}, il a {{ user.petshops.count }} petshops et {{ user.horseSchleiches.count }} chevaux Schleich, les voici :</p>
     </div>
     <div id="cards_landscape_wrap-2">
     <div class="container">

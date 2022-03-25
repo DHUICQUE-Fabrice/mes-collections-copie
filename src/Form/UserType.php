@@ -8,13 +8,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nickname', TextType::class,[
+            ->add('name', TextType::class,[
                 'label' => 'Pseudo'
             ])
             ->add('email')
@@ -24,8 +25,13 @@ class UserType extends AbstractType
                     'placeholder' => 'J\'adore collectionner !',
                     'rows' => 5
                 )
-            ])->add('imageFile', ImageFileType::class)
-        ;
+            ])
+            ->add('file', VichImageType::class, [
+                'label'=>'Veuillez ajouter une photo (facultatif, maximum 2Mo)',
+                'required' => false,
+                'allow_delete' => false,
+                'download_link' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

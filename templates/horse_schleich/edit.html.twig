@@ -4,15 +4,12 @@
     <div class="container">
 
         {{ form_start(horseSchleichForm) }}
-
         {{ form_widget(horseSchleichForm) }}
-        <br>
-        <div class="row">
-            <div class="col-8"></div>
-            <div class="col-4">
+            {% if horseSchleich.imageName %}
+                <a href="{{ path('delete_horse_schleich_image', {id: horseSchleich.id}) }}" class="btn btn-primary">Supprimer l'image</a>
+            {% endif %}
                 <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
-            </div>
-        </div>
+                <a href="{{ path('delete_horse_schleich', {id: horseSchleich.id})}}" class="btn btn-danger">Supprimer {{ horseSchleich.name }}</a>
         {{ form_end(horseSchleichForm) }}
 
     </div>

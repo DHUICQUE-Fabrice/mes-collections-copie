@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\File\File;
 
 abstract class AbstractImageFile
 {
-
     use TimestampableEntity;
 
     /**
@@ -29,10 +28,10 @@ abstract class AbstractImageFile
     }
 
     /**
-     * @param string $imageName
+     * @param string|null $imageName
      * @return $this
      */
-    public function setImageName(string $imageName): self
+    public function setImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
 

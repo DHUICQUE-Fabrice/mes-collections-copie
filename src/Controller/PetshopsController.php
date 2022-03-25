@@ -51,7 +51,6 @@ class PetshopsController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route ("/petshop/details/{slug}", name="petshop_details", requirements={"slug": "[a-z0-9\-]*"})
      * @param Petshop $petshop
@@ -111,11 +110,13 @@ class PetshopsController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @param PetshopRepository $petshopRepository
+     * @param AlertServiceInterface $alertService
      * @return RedirectResponse|Response
      */
     public function edit(int                    $id, Request $request,
                                 EntityManagerInterface $entityManager,
-                                PetshopRepository      $petshopRepository){
+                                PetshopRepository      $petshopRepository,
+                                    AlertServiceInterface   $alertService){
         $petshop = $petshopRepository->find($id);
 
         $this->denyAccessUnlessGranted('edit', $petshop);
@@ -125,10 +126,13 @@ class PetshopsController extends AbstractController
         if ($petshopForm->isSubmitted() && $petshopForm->isValid()){
             $entityManager->persist($petshop);
             $entityManager->flush();
+            $alertService->success(sprintf('<b>%s</b> a bien été modifié !', $petshop->getName()));
+
             return $this->redirectToRoute('petshop_details', ['id'=>$id, 'slug'=>$petshop->getSlug()]);
         }
         return $this->render('petshops/edit.html.twig',[
-            'petshopForm' => $petshopForm->createView()
+            'petshopForm' => $petshopForm->createView(),
+            'petshop' => $petshop
         ]);
     }
 
@@ -136,11 +140,13 @@ class PetshopsController extends AbstractController
      * @Route ("/supprimer/petshop/{id}", name="delete_petshop")
      * @param int $id
      * @param EntityManagerInterface $entityManager
+     * @param AlertServiceInterface $alertService
      * @param PetshopRepository $petshopRepository
      * @return Response
      */
     public function delete(int $id,
                           EntityManagerInterface $entityManager,
+                          AlertServiceInterface $alertService,
                           PetshopRepository      $petshopRepository): Response
     {
         $petshop = $petshopRepository->find($id);
@@ -148,8 +154,31 @@ class PetshopsController extends AbstractController
         $user = $this->getUser();
         $this->denyAccessUnlessGranted('delete', $petshop);
         $entityManager->remove($petshop);
+        $alertService->success(sprintf('<b>%s</b> a bien été supprimé !', $petshop->getName()));
         $entityManager->flush();
-        return $this->redirectToRoute('profile', ['nickname' => $user->getNickName()]);
+        return $this->redirectToRoute('profile', ['name' => $user->getName()]);
+    }
+
+    /**
+     * @Route("/petshop/{id}/delete/image", name="delete_petshop_image")
+     * @param int $id
+     * @param EntityManagerInterface $entityManager
+     * @param AlertServiceInterface $alertService
+     * @param PetshopRepository $petshopRepository
+     * @return Response
+     */
+    public function deleteImage(int $id,
+                                EntityManagerInterface $entityManager,
+                                AlertServiceInterface $alertService,
+                                PetshopRepository      $petshopRepository): Response
+    {
+        $petshop = $petshopRepository->find($id);
+        $this->denyAccessUnlessGranted('edit', $petshop);
+        $petshop->setImageName(null);
+        $entityManager->persist($petshop);
+        $alertService->success('L\'image a bien été supprimée !');
+        $entityManager->flush();
+        return $this->redirectToRoute('petshop_details', ['id' => $id, 'slug' => $petshop->getSlug()]);
     }
 
 }

@@ -144,11 +144,11 @@ class AppFixtures extends Fixture
         for ($i = 0 ; $i < 10 ; $i++){
             $user = new User();
             $user->setEmail($faker->unique()->email())
-                ->setNickname($faker->unique()->userName())
+                ->setName($faker->unique()->userName())
                 ->setAbout($faker->realText)
                 ->setRegisteredAt(($faker->dateTimeBetween('- 1 year', '- 1 month')))
                 ->setRoles(['ROLE_USER']);
-            $password =  $this->encoder->hashPassword($user, $user->getNickname());
+            $password =  $this->encoder->hashPassword($user, $user->getName());
             $user->setPassword($password);
             $manager->persist($user);
         }

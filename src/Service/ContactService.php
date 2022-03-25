@@ -39,7 +39,7 @@ class ContactService
          $email = (new Email())
              ->from('aelhan.dev@gmail.com')
              ->to('aelhan.dev@gmail.com')
-             ->subject('Nouveau message de ' . $contact->getNickname() . ' ( ' . $contact->getEmail() . ' )')
+             ->subject('Nouveau message de ' . $contact->getName() . ' ( ' . $contact->getEmail() . ' )')
              ->text('Message du ' . $contact->getCreatedAt()->format('d/m/Y') . ' : ' . $contact->getMessage());
 
 

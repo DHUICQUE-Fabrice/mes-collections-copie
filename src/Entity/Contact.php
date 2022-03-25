@@ -23,7 +23,7 @@ class Contact
      * @ORM\Column(type="string", length=255)
      * @var string
      */
-    private string $nickname;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -60,18 +60,18 @@ class Contact
     /**
      * @return string
      */
-    public function getNickname(): string
+    public function getName(): string
     {
-        return $this->nickname;
+        return $this->name;
     }
 
     /**
-     * @param $nickname
+     * @param $name
      * @return $this
      */
-    public function setNickname($nickname): Contact
+    public function setName($name): Contact
     {
-        $this->nickname = $nickname;
+        $this->name = $name;
         return $this;
     }
 

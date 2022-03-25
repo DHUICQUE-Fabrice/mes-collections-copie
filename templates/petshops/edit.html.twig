@@ -4,15 +4,12 @@
     <div class="container">
 
         {{ form_start(petshopForm) }}
-
         {{ form_widget(petshopForm) }}
-        <br>
-        <div class="row">
-            <div class="col-8"></div>
-            <div class="col-4">
+            {% if petshop.imageName %}
+                <a href="{{ path('delete_petshop_image', {id: petshop.id}) }}" class="btn btn-primary">Supprimer l'image</a>
+            {% endif %}
                 <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
-            </div>
-        </div>
+                <a href="{{ path('delete_petshop', {id: petshop.id}) }}" class="btn btn-danger">Supprimer {{ petshop.name }}</a>
         {{ form_end(petshopForm) }}
 
     </div>

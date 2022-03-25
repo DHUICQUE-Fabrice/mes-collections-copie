@@ -3,23 +3,27 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Traits\SluggableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Serializable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use function unserialize;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"nickname"}, message="Ce pseudo est déjà utilisé par un autre utilisateur !")
+ * @UniqueEntity(fields={"name"}, message="Ce pseudo est déjà utilisé par un autre utilisateur !")
+ * @Vich\Uploadable
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface, Serializable
+class User extends AbstractImageFile implements UserInterface, PasswordAuthenticatedUserInterface, Serializable
 {
-    use TimestampableEntity;
+    use SluggableTrait;
 
     /**
      * @ORM\Id
@@ -32,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
      * @ORM\Column(type="string", length=180, unique=true)
      * @var string
      */
-    private string $nickname;
+    private string $name;
 
     /**
      * @ORM\Column(type="json")
@@ -55,9 +59,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @var string
+     * @var string|null
      */
-    private string $about;
+    private ?string $about;
 
     /**
      * @ORM\OneToMany(targetEntity=Petshop::class, mappedBy="user")
@@ -69,10 +73,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
      */
     private Collection $horseSchleiches;
 
+
     /**
-     * @ORM\OneToOne(targetEntity=UserProfileImage::class, cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Vich\UploadableField (mapping="uploaded_images", fileNameProperty="imageName")
+     * @var File|null
      */
-    private ?UserProfileImage $userProfileImage;
+    protected ?File $file = null;
 
     public function __construct()
     {
@@ -91,18 +97,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
     /**
      * @return string
      */
-    public function getNickname(): string
+    public function getName(): string
     {
-        return $this->nickname;
+        return $this->name;
     }
 
     /**
-     * @param $nickname
+     * @param $name
      * @return $this
      */
-    public function setNickname($nickname): User
+    public function setName($name): User
     {
-        $this->nickname = $nickname;
+        $this->name = $name;
         return $this;
     }
 
@@ -113,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
      */
     public function getUserIdentifier(): string
     {
-        return $this->nickname;
+        return $this->name;
     }
 
     /**
@@ -121,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
      */
     public function getUsername(): string
     {
-        return $this->nickname;
+        return $this->name;
     }
 
     /**
@@ -302,7 +308,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
      */
     public function __toString()
     {
-        return $this->getNickname();
+        return $this->getName();
     }
 
     /**
@@ -312,7 +318,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
     {
         return serialize([
             $this->id,
-            $this->nickname,
+            $this->name,
             $this->email,
             $this->password,
         ]);
@@ -326,21 +332,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
     {
         [
             $this->id,
-            $this->nickname,
+            $this->name,
             $this->email,
             $this->password,
         ] = unserialize($data, [self::class]);
     }
 
-    public function getUserProfileImage(): ?UserProfileImage
-    {
-        return $this->userProfileImage;
-    }
 
-    public function setUserProfileImage(?UserProfileImage $userProfileImage): self
-    {
-        $this->userProfileImage = $userProfileImage;
-
-        return $this;
-    }
 }

@@ -121,25 +121,47 @@ class HorseSchleichController extends AbstractController
             return $this->redirectToRoute('horse_schleich_details', ['id'=>$id, 'slug'=>$horseSchleich->getSlug()]);
         }
         return $this->render('horse_schleich/edit.html.twig',[
-            'horseSchleichForm' => $horseSchleichForm->createView()
+            'horseSchleichForm' => $horseSchleichForm->createView(),
+            'horseSchleich' => $horseSchleich
         ]);
     }
 
     /**
-     * @Route ("/supprimer/schleich/{id}", name="delete-horse_schleich")
+     * @Route ("/supprimer/schleich/{id}", name="delete_horse_schleich")
      * @param int $id
+     * @param AlertServiceInterface $alertService
      * @param EntityManagerInterface $entityManager
      * @param HorseSchleichRepository $horseSchleichRepository
      * @return Response
      */
-    public function delete(int $id, EntityManagerInterface $entityManager, HorseSchleichRepository $horseSchleichRepository): Response
+    public function delete(int $id,AlertServiceInterface $alertService, EntityManagerInterface $entityManager, HorseSchleichRepository $horseSchleichRepository): Response
     {
         $horseSchleich = $horseSchleichRepository->find($id);
         /** @var $user User */
         $user = $this->getUser();
         $this->denyAccessUnlessGranted('delete', $horseSchleich);
         $entityManager->remove($horseSchleich);
+        $alertService->success(sprintf('<b>%s</b> a bien été supprimé !', $horseSchleich->getName()));
         $entityManager->flush();
-        return $this->redirectToRoute('profile', ['nickname' => $user->getNickName()]);
+        return $this->redirectToRoute('profile', ['name' => $user->getName()]);
+    }
+
+    /**
+     * @Route ("/schleich/{id}/delete/image", name="delete_horse_schleich_image")
+     * @param int $id
+     * @param AlertServiceInterface $alertService
+     * @param EntityManagerInterface $entityManager
+     * @param HorseSchleichRepository $horseSchleichRepository
+     * @return Response
+     */
+    public function deleteImage(int $id, AlertServiceInterface $alertService, EntityManagerInterface $entityManager, HorseSchleichRepository $horseSchleichRepository): Response
+    {
+        $horseSchleich = $horseSchleichRepository->find($id);
+        $this->denyAccessUnlessGranted('edit', $horseSchleich);
+        $horseSchleich->setImageName(null);
+        $entityManager->persist($horseSchleich);
+        $alertService->success('L\'image a bien été supprimée !');
+        $entityManager->flush();
+        return $this->redirectToRoute('horse_schleich_details', ['id' => $id, 'slug' => $horseSchleich->getSlug()]);
     }
 }

@@ -59,8 +59,8 @@ class RegistrationController extends AbstractController
             $mailer = new MailjetService($mailerInterface);
             $sender = 'aelhan.dev@gmail.com';
             $receiver = 'aelhan.dev@gmail.com';
-            $subject = $user->getNickname() . ' vient de s\'inscrire !';
-            $message = 'Nouvel utilisateur ' . $user->getNickname()
+            $subject = $user->getName() . ' vient de s\'inscrire !';
+            $message = 'Nouvel utilisateur ' . $user->getName()
                 . ' ; Adresse mail : ' . $user->getEmail();
             $mailer->sendEmail($sender,$receiver,$subject,$message);
             return $userAuthenticator->authenticateUser(
