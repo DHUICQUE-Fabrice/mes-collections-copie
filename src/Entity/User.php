@@ -80,6 +80,12 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
      */
     protected ?File $file = null;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string|null
+     */
+    private ?string $resetToken;
+
     public function __construct()
     {
         $this->petshops = new ArrayCollection();
@@ -337,6 +343,14 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
             $this->password,
         ] = unserialize($data, [self::class]);
     }
+
+    public function setResetToken(?string $token): self
+    {
+        $this->resetToken = $token;
+
+        return $this;
+    }
+
 
 
 }
