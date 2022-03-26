@@ -7,8 +7,13 @@ liip_imagine:
             quality: 75
             filters:
                 thumbnail:
-                    size: [600, 330]
-                    mode: outbound
-
+                    size: [400, 330]
+                    mode: inset
+        details:
+            quality: 75
+            filters:
+                thumbnail:
+                    size: [600, 600]
+                    mode: crop
     controller:
         redirect_response_code: 302

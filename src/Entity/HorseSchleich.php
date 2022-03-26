@@ -8,6 +8,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -74,6 +75,7 @@ class HorseSchleich extends AbstractImageFile
 
     /**
      * @Vich\UploadableField(mapping="uploaded_images", fileNameProperty="imageName")
+     * @Assert\File(maxSize="1024k")
      * @var File|null
      */
     protected ?File $file = null;

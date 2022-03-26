@@ -10,7 +10,7 @@
         <div class="text-box">
             <div class="image-box">
                 {% if schleich.imageName %}
-                <img src="{{ path_asset_horse_schleich ~ schleich.imageName}}" alt="{{ schleich.name }}" width="250"/>
+                <img src="{{ (path_asset_horse_schleich ~ schleich.imageName) | imagine_filter('details') }}" alt="{{ schleich.name }}" width="250"/>
                 {% else %}
                     <img src="{{ asset('build/images/placeholder_horseschleich.png') }}" alt="{{ schleich.name }}" width="250"/>
                 {% endif %}

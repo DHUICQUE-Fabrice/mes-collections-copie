@@ -11,7 +11,7 @@
     {% endif %}
 
         {% if user.imageName %}
-            <img src="{{ path_asset_image_profile ~ user.imageName }}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
+            <img src="{{ (path_asset_image_profile ~ user.imageName) | imagine_filter('details')  }}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
         {% else %}
             <img src="{{ asset('build/images/placeholder_avatar.png')}}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
         {% endif %}

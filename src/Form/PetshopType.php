@@ -37,7 +37,7 @@ class PetshopType extends AbstractType
                 'placeholder'=>'Sélectionnez'
             ])
             ->add('file', VichImageType::class, [
-                'label'=>'Veuillez ajouter une photo (facultatif, maximum 2Mo)',
+                'label'=>'Veuillez ajouter une photo (facultatif, maximum 1Mo)',
                 'required' => false,
                 'allow_delete' => false,
                 'download_link' => false,

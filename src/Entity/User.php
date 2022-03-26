@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use function unserialize;
 
@@ -76,6 +77,7 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
 
     /**
      * @Vich\UploadableField (mapping="uploaded_images", fileNameProperty="imageName")
+     * @Assert\File(maxSize="1024k")
      * @var File|null
      */
     protected ?File $file = null;

@@ -15,7 +15,7 @@
                                 {% endif %}
                         {% endif %}
                         {% if item.imageName %}
-                            <img src="{{ asset(path_asset_petshop ~ item.imageName) }}" alt="{{ item.name }}" />
+                            <img src="{{ asset(path_asset_image ~ item.imageName) | imagine_filter('miniature') }}" alt="{{ item.name }}" />
                         {% endif %}
                             </a>
                 </div>
