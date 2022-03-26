@@ -3,12 +3,14 @@
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
             <a class="navbar-brand text-white" href="/">Mes Collections</a>
+            {% if app.user %}
             <div class="col-2">
                 <a href="{{ path('create_new') }}" class="d-block link-dark text-decoration-none" aria-expanded="false" title="Nouveau">
                     <img src="{{ asset('img/icons/plusbutton.png') }}" alt="Nouveau" width="32" height="32" class="rounded-circle">
                 </a>
             </div>
-            <div class="dropdown text-end">
+            {% endif %}
+            <div class="dropdown text-end col-2">
                 {% if app.user %}
                 <a href="/" class="d-inline nav-link text-white" >{{ app.user.name }}</a>
                 {% endif %}
@@ -25,29 +27,12 @@
                     {% endif %}
                 </ul>
             </div>
-            <div class="col-2">
+            <div class="text-end col-2">
                 <a href="{{ path('contact') }}" title="Contact" class="d-block link-dark text-decoration-none" aria-expanded="false">Contact</a>
                 {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('admin') }}" title="Admin" class="d-block link-dark text-decoration-none" aria-expanded="false">Admin</a>
                 {% endif %}
             </div>
-
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                <input type="search" class="form-control" placeholder="Rechercher..." aria-label="Rechercher">
-            </form>
-            <button><img src="{{ asset('img/icons/search-icon.png') }}" alt="rechercher" width="32" height="32"></button>
-            <div class="col-2"></div>
-
-            <div class="dropdown text-end">
-                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ asset('img/icons/menu-icon.png') }}" alt="Menu" width="32" height="32" class="rounded-circle">
-                </a>
-                <ul class="dropdown-menu text-small" aria-labelledby="dropdownMenu">
-                    <li><a class="dropdown-item" href="{{path('petshops')}}">Petshop</a></li>
-                    <li><a class="dropdown-item" href="{{ path('horse_schleich')}}">Schleich</a></li>
-                </ul>
-            </div>
-
         </div>
     </div>
 </header>

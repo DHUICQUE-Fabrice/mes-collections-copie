@@ -5,8 +5,13 @@
 {% block body %}
 <div class="container">
     <h1>Formulaire de contact</h1>
+    <p class="text-black">Si vous avez une question à propos du site, une suggestion d'amélioration, ou tout simplement m'envoyer un message, c'est par ici que ça se passe !</p>
     {{ form_start(form) }}
     {{ form_widget(form) }}
+    <br>
+    <p class="text-black">En cliquant sur le bouton "Envoyer" ci-dessous, vous acceptez que votre message et votre adresse email soient conservés et utilisés dans le seul cadre de la demande que vous avez formulée.</p>
+    <p class="text-black">Aucune utilisation commerciale de vos données ne sera faite.</p>
+    <br>
     <button class="btn btn-primary">Envoyer</button>
     {{ form_end(form) }}
 </div>

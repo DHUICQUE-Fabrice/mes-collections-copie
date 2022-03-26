@@ -16,7 +16,12 @@
         {{ form_row(registrationForm.plainPassword, {
             label: 'Mot de passe : '
         }) }}<br>
-        {{ form_row(registrationForm.agreeTerms) }}<br>
+
+
+    {{ form_row(registrationForm.agreeTerms, { label: 'Je reconnais avoir lu et compris les CGU et je les accepte.'}) }}
+    <a href="{{ path('app_cgu') }}">Consulter les CGU</a>
+    <br>
+    <br>
 
         <button type="submit" class="btn btn-primary">Créer un compte</button>
     {{ form_end(registrationForm) }}

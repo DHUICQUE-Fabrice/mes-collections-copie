@@ -115,4 +115,5 @@ class SecurityController extends AbstractController
         }
         return $this->render('security/resetPassword.html.twig', ['token' => $token]);
     }
+
 }
