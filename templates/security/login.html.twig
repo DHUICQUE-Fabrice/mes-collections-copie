@@ -9,7 +9,7 @@
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
+    <h1>Connexion</h1>
     <label for="inputNickname">Pseudo : </label>
     <input type="text" value="{{ last_username }}" name="name" id="inputNickname" class="form-control" autocomplete="username" required autofocus>
     <label for="inputPassword">Mot de passe : </label>

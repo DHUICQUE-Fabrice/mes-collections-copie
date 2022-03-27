@@ -1,10 +1,25 @@
 <footer>
     <div class="bg-custom mt-5 pt-30 pt-60 pb-5">
-        <h2 class="text-center text-white">Mes collections</h2>
+        <div class="row text-center">
+            <h3>Plan du site</h3>
+            <ul>
+                <li><a title="Accueil" href="{{ path('accueil') }}">Accueil</a></li>
+                {% if not app.user %}
+                    <li><a title="Se connecter" href="{{ path('app_login') }}">Se connecter</a></li>
+                    <li><a title="Créer un compte" href="{{ path('app_register') }}">S'inscrire</a></li>
+                {% else %}
+                    <li><a title="Voir mon profil" href="{{path('profile', {name: app.user.name})}}">Mon profil</a></li>
+                {% endif %}
+                <li><a href="{{ path('contact') }}" title="Contact">Contact</a></li>
+                <li><a href="{{ path('app_cgu') }}" title="Contact">CGU</a></li>
+            </ul>
+        </div>
         <div class="row">
             <div class="col-md-12 p-5">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-1"></div>
+
+                    <div class="col-md-10">
                         <h3>A propos du site</h3>
                         <p class="pt-3" style="text-align: justify">Le site <strong>mes-collections.herokuapp.com</strong> est un simple site de démonstration, mais fonctionnel. Celui-ci permet à tout un chacun de s'inscrire, se connecter et capitaliser ses différentes collections.
                             Pour le moment, les collections éligibles sont les Littlest Petshops et les Schleich, car ce sont les collections les plus fournies appartenant à ma fille Aëla (qui a beaucoup aidé à la création du site 😉 ).
@@ -14,18 +29,7 @@
                     <div class="col-md-4">
                     </div>
                     <div class="col-md-4">
-                        <h3>Plan du site</h3>
-                        <ul>
-                            <li><a class="text-white" title="Accueil" href="{{ path('accueil') }}">Accueil</a></li>
-                            {% if not app.user %}
-                            <li><a class="text-white" title="Se connecter" href="{{ path('app_login') }}">Se connecter</a></li>
-                            <li><a class="text-white" title="Créer un compte" href="{{ path('app_register') }}">S'inscrire</a></li>
-                            {% else %}
-                            <li><a class="text-white" title="Voir mon profil" href="#">Mon profil</a></li>
-                            {% endif %}
-                            <li><a href="{{ path('contact') }}" class="text-white" title="Contact">Contact</a></li>
-                            <li><a href="{{ path('app_cgu') }}" class="text-white" title="Contact">CGU</a></li>
-                        </ul>
+
                     </div>
                 </div>
             </div>

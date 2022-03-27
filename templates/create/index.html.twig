@@ -7,12 +7,12 @@
     <div id="cards_landscape_wrap-2">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-lg-4 text-black">
+                <div class="col-xs-12 col-sm-6 col-lg-4">
                     <a href="{{ path('create_new_petshop') }}" title="Nouveau Petshop">
                         <div class="card-flyer">
                             <div class="text-box">
                                 <div class="image-box">
-                                    <img src="https://picsum.photos/300/200" alt="Nouveau Petshop" />
+                                    <img src="{{ asset('build/images/image_petshop_group.jpg') | imagine_filter('miniature')}}" alt="Nouveau Petshop" />
                                 </div>
                                 <div class="text-container">
                                     <h6>Petshop</h6>
@@ -22,7 +22,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-lg-4 text-black">
+                <div class="col-xs-12 col-sm-6 col-lg-4">
                     <a href="{{ path('create_new_horseSchleich') }}" title="Nouveau cheval Schleich">
                         <div class="card-flyer">
                             <div class="text-box">
@@ -37,7 +37,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-lg-4 text-black">
+                <div class="col-xs-12 col-sm-6 col-lg-4">
                     <a href="{{ path('contact') }}" title="Contactez-moi !">
                         <div class="card-flyer">
                             <div class="text-box">

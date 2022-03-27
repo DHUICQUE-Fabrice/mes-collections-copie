@@ -4,23 +4,31 @@
 {% endblock %}
 {% block body %}
     <div class="container">
-    {% if app.user == user %}
-        <form action="{{ path('editProfile', {name: user.name}) }}">
-            <button type="submit" name="edit" class="btn btn-primary">Modifier mon profil</button>
-        </form>
-    {% endif %}
+        <div class="row">
+            <div class="col-md-4">
+                {% if user.imageName %}
+                    <img src="{{ (path_asset_image_profile ~ user.imageName) | imagine_filter('details')  }}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
+                {% else %}
+                    <img src="{{ asset('build/images/placeholder_avatar.png')}}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
+                {% endif %}
+            </div>
 
-        {% if user.imageName %}
-            <img src="{{ (path_asset_image_profile ~ user.imageName) | imagine_filter('details')  }}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
-        {% else %}
-            <img src="{{ asset('build/images/placeholder_avatar.png')}}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
-        {% endif %}
+            <div class="col-md-8">
+                <h3 class="fonttext">A propos de {{ user.name }} :</h3>
+                {% if user.about %}
+                    <p class="message">{{ user.about | nl2br}}</p>
+                    {% else %}
+                        <p>{{ user.name }} n'a pas rentré de description</p>
 
-        {% if user.about %}
-        <p class="text-black text-center">{{ user.about }}</p>
-    {% endif %}
-    <p class="text-center text-black">{{ user.name }} est membre depuis le {{ user.createdAt | date('d/m/Y')}}, il a {{ user.petshops.count }} petshops et {{ user.horseSchleiches.count }} chevaux Schleich, les voici :</p>
+                {% endif %}
+            </div>
+
+    <div class="row">
+        <p class="text-center">{{ user.name }} est membre depuis le {{ user.createdAt | date('d/m/Y')}}, il a {{ user.petshops.count }} petshops et {{ user.horseSchleiches.count }} chevaux Schleich, les voici :</p>
+
     </div>
+        </div>
+        </div>
     <div id="cards_landscape_wrap-2">
     <div class="container">
         <div class="row">
@@ -32,9 +40,15 @@
                     {% endif %}
                 {% include 'inc/_cards.html.twig' %}
             {% endfor %}
+                {% include 'inc/_card_add_new_item.html.twig' %}
         </div>
     </div>
 </div>
+    {% if app.user == user %}
+        <form action="{{ path('editProfile', {name: user.name}) }}">
+            <button type="submit" name="edit" class="btn btn-primary btn-right">Modifier mon profil</button>
+        </form>
+    {% endif %}
     <div class="d-flex justify-content-center">
         {% do items.setPageRange(4) %}
         {{ knp_pagination_render(items, 'inc/_pagination.html.twig') }}

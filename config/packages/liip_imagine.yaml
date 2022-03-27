@@ -7,13 +7,22 @@ liip_imagine:
             quality: 75
             filters:
                 thumbnail:
-                    size: [400, 330]
+                    size: [512, 512]
+                    mode: outbound
+
+        miniature_big:
+            quality: 75
+            filters:
+                thumbnail:
+                    size: [ 800, 400 ]
                     mode: inset
+
         details:
             quality: 75
             filters:
                 thumbnail:
                     size: [600, 600]
                     mode: crop
+
     controller:
         redirect_response_code: 302

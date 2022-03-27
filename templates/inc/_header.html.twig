@@ -1,21 +1,28 @@
-<header class="p-3 mb-3 border-bottom header-custom">
+<header class="p-6 mb-6 header-custom">
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <div class="d-flex flex-fill align-items-center justify-content-end justify-content-lg-start">
 
-            <a class="navbar-brand text-white" href="/">Mes Collections</a>
+            <a class="navbar-brand-custom" href="/">Mes Collect
+                <span style="margin: -10px;color: #44f82c">i</span>
+                <span style="margin: -5px;color: #4be7f7">o</span>
+                <span style="margin: -6px;color: #634af8">n</span>
+                <span style="margin: -7px;color: #fb47e6">s</span>
+            </a>
+            <div class="col-1"></div>
+
             {% if app.user %}
             <div class="col-2">
-                <a href="{{ path('create_new') }}" class="d-block link-dark text-decoration-none" aria-expanded="false" title="Nouveau">
-                    <img src="{{ asset('img/icons/plusbutton.png') }}" alt="Nouveau" width="32" height="32" class="rounded-circle">
+                <a href="{{ path('create_new') }}" class="d-block text-center" aria-expanded="false" title="Nouveau">
+                    <i class="fa-solid fa-folder-plus" style="font-size: 3rem" title="Nouveau"></i>
                 </a>
             </div>
             {% endif %}
-            <div class="dropdown text-end col-2">
+            <div class="col-2">
                 {% if app.user %}
-                <a href="/" class="d-inline nav-link text-white" >{{ app.user.name }}</a>
+                <a href="/" class="text-center d-block nav-link" >{{ app.user.name }}</a>
                 {% endif %}
-                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ asset('img/icons/profile.png') }}" alt="Profil" width="32" height="32" class="rounded-circle">
+                <a href="#" class="text-center d-block dropdown-toggle link-secondary text-decoration-none" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-user-circle" style="font-size: 3rem"></i>
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownMenu">
                     {% if app.user %}
@@ -27,10 +34,10 @@
                     {% endif %}
                 </ul>
             </div>
-            <div class="text-end col-2">
-                <a href="{{ path('contact') }}" title="Contact" class="d-block link-dark text-decoration-none" aria-expanded="false">Contact</a>
+            <div class="col-2">
+                <a href="{{ path('contact') }}" title="Contact" class="d-block text-decoration-none text-center" aria-expanded="false">Contact</a>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('admin') }}" title="Admin" class="d-block link-dark text-decoration-none" aria-expanded="false">Admin</a>
+                    <a href="{{ path('admin') }}" title="Admin" class="d-block text-decoration-none text-center" aria-expanded="false">Admin</a>
                 {% endif %}
             </div>
         </div>

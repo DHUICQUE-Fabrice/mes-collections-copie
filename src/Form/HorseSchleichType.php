@@ -20,34 +20,54 @@ class HorseSchleichType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'=>'Nom : '
+                'label'=>'Nom : ',
+                'attr' => [
+                    'placeholder' => 'Nom',
+                    'class' => 'fonttext',
+                ]
             ])
             ->add('biography', TextareaType::class, [
                 'label'=>'Biographie : ',
+                'attr' => [
+                    'placeholder' => 'Biographie',
+                    'class' => 'fonttext',
+                ]
             ])
             ->add('type', EntityType::class, [
                 'class'=>HorseType::class,
                 'choice_label'=>'name',
                 'label'=>'Type : ',
-                'placeholder'=>'Sélectionnez'
+                'placeholder'=>'Sélectionnez',
+                'attr' => [
+                    'class' => 'fonttext',
+                ]
             ])
             ->add('coat', EntityType::class, [
                 'class'=>HorseCoat::class,
                 'choice_label'=>'name',
                 'label'=>'Robe : ',
-                'placeholder'=>'Sélectionnez'
+                'placeholder'=>'Sélectionnez',
+                'attr' => [
+                    'class' => 'fonttext',
+                ]
             ])
             ->add('species', EntityType::class, [
                 'class'=>HorseSpecies::class,
                 'choice_label'=>'name',
                 'label'=>'Race : ',
-                'placeholder'=>'Sélectionnez'
+                'placeholder'=>'Sélectionnez',
+                'attr' => [
+                    'class' => 'fonttext'
+                ]
             ])
             ->add('file', VichImageType::class, [
                 'label'=>'Veuillez ajouter une photo (facultatif, maximum 1Mo)',
                 'required' => false,
                 'allow_delete' => false,
                 'download_link' => false,
+                'attr' => [
+                    'class' => 'fonttext',
+                ]
             ]);
     }
 

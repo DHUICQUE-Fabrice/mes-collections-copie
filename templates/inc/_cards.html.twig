@@ -1,17 +1,17 @@
 
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 text-black">
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div class="card-flyer">
-            <div class="text-box">
-                <div class="image-box">
+            <div class="text-box-custom">
+                <div class="image-box-custom">
                      {% if thisClass == "petshop" %}
                             <a href="{{ path('petshop_details', {slug: item.slug}) }}" title="{{ item.name }}">
                                 {% if not item.imageName %}
-                                    <img src="{{ asset('build/images/placeholder_petshop.png') }}" alt="{{ item.name }}" />
+                                    <img src="{{ asset('build/images/placeholder_petshop.png') | imagine_filter('miniature')  }}" alt="{{ item.name }}" />
                                 {% endif %}
                         {% elseif thisClass == "horse_schleich" %}
                             <a href="{{ path('horse_schleich_details', {slug: item.slug, id: item.id}) }}" title="{{ item.name }}">
                                 {% if not item.imageName %}
-                                    <img src="{{ asset('build/images/placeholder_horseschleich.png') }}" alt="{{ item.name }}" />
+                                    <img src="{{ asset('build/images/placeholder_horseschleich.png') | imagine_filter('miniature')  }}" alt="{{ item.name }}" />
                                 {% endif %}
                         {% endif %}
                         {% if item.imageName %}
@@ -19,17 +19,24 @@
                         {% endif %}
                             </a>
                 </div>
-                <div class="text-container">
-                    <h6>{{ item.name }}</h6>
-                    Propriétaire :
+                <div class="text-container text-container-custom">
+                    <h6><span class="fonttext">Nom : </span> {{ item.name }}</h6>
+
+                    {% if thisClass == "petshop" %}
+                        <p>Animal : {{ item.species }}</p>
+                        <p>Taille : {{ item.size }}</p>
+                    {% elseif thisClass == "horse_schleich" %}
+                        <p>Type : {{ item.type }}</p>
+                        <p>Race : {{ item.species }}</p>
+                        <p>Robe : {{ item.coat }}</p>
+                    {% endif %}
+{#                    <p>Biographie de {{ item.name }} : {{ item.biography | u.truncate(25, '...', false) }}</p>#}
+                    <p>Appartient à :
                         {% if app.user %}
-                            <a href="{{ path('profile', {name: item.user.name}) }}" class="nav-link" title="{{ item.user.name }}">
-                                {{ item.user.name }}
-                            </a>
+                            <a href="{{ path('profile', {name: item.user.name}) }}" title="{{ item.user.name }}">{{ item.user.name }}</a>
                         {% else %}
                             {{ item.user.name }}
-                        {% endif %}
-                    <p>{{ item.biography | u.truncate(50, '...', false) }}</p>
+                        {% endif %}</p>
                 </div>
             </div>
         </div>
