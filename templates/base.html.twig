@@ -7,11 +7,7 @@
         le monde pourra les admirer ! Qu'il s'agisse de Petshops, de Schleichs ou d'autres jouets ou objets, c'est
         ici que vous pourrez les montrer au monde ! Vous pouvez aussi bien sûr regarder les acquisitions des autres
         utilisateurs de notre site.">
-    <title>{% block title %}Mes collections{% endblock %}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baumans&display=swap" rel="stylesheet">
-
+    <title>Mes collections{% block title %}{% endblock %}</title>
 
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}

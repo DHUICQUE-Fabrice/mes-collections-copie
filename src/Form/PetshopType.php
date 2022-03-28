@@ -28,13 +28,13 @@ class PetshopType extends AbstractType
                 'class'=>PetshopSize::class,
                 'choice_label'=>'name',
                 'label'=>'Taille : ',
-                'placeholder'=>'Sélectionnez'
+                'placeholder'=>'Sélectionnez',
             ])
             ->add('species', EntityType::class,[
                 'class'=>PetshopSpecies::class,
                 'choice_label'=>'name',
                 'label'=>'Animal : ',
-                'placeholder'=>'Sélectionnez'
+                'placeholder'=>'Sélectionnez',
             ])
             ->add('file', VichImageType::class, [
                 'label'=>'Veuillez ajouter une photo (facultatif, maximum 1Mo)',

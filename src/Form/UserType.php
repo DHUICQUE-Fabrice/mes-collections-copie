@@ -23,8 +23,8 @@ class UserType extends AbstractType
                 'label' => "A propos de moi",
                 'attr' => array(
                     'placeholder' => 'J\'adore collectionner !',
-                    'rows' => 5
-                )
+                    'rows' => 5,
+                ),
             ])
             ->add('file', VichImageType::class, [
                 'label'=>'Veuillez ajouter une photo (facultatif, maximum 1Mo)',

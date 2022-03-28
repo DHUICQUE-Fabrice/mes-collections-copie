@@ -98,14 +98,15 @@ class UserController extends AbstractController
                                 EntityManagerInterface $entityManager,
                                 Request $request){
         $user = $userRepository->findOneBy(['name' => $name]);
+
         $this->denyAccessUnlessGranted('edit', $user);
-        // TODO: Display a confirmation message in a popup
+        if ($user !== null) {
+            $user->setImageName(null);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $alertService->success('Image supprimée avec succès');
+        }
 
-
-        $user->setImageName(null);
-        $entityManager->persist($user);
-        $alertService->success('L\'image a bien été supprimée');
-        $entityManager->flush();
         return $this->redirectToRoute('editProfile', [
             'name' => $user->getName()
         ]);

@@ -31,7 +31,7 @@ class HorseSchleichType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Biographie',
                     'class' => 'fonttext',
-                ]
+                ],
             ])
             ->add('type', EntityType::class, [
                 'class'=>HorseType::class,
@@ -40,7 +40,7 @@ class HorseSchleichType extends AbstractType
                 'placeholder'=>'Sélectionnez',
                 'attr' => [
                     'class' => 'fonttext',
-                ]
+                ],
             ])
             ->add('coat', EntityType::class, [
                 'class'=>HorseCoat::class,
@@ -49,7 +49,7 @@ class HorseSchleichType extends AbstractType
                 'placeholder'=>'Sélectionnez',
                 'attr' => [
                     'class' => 'fonttext',
-                ]
+                ],
             ])
             ->add('species', EntityType::class, [
                 'class'=>HorseSpecies::class,
@@ -57,8 +57,8 @@ class HorseSchleichType extends AbstractType
                 'label'=>'Race : ',
                 'placeholder'=>'Sélectionnez',
                 'attr' => [
-                    'class' => 'fonttext'
-                ]
+                    'class' => 'fonttext',
+                ],
             ])
             ->add('file', VichImageType::class, [
                 'label'=>'Veuillez ajouter une photo (facultatif, maximum 1Mo)',
@@ -67,7 +67,7 @@ class HorseSchleichType extends AbstractType
                 'download_link' => false,
                 'attr' => [
                     'class' => 'fonttext',
-                ]
+                ],
             ]);
     }
 

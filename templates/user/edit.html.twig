@@ -7,7 +7,9 @@
         {{ form_start(userForm) }}
         {{ form_widget(userForm) }}
             {% if app.user.imageName %}
+
                 <a href="{{ path('delete_profile_image', {name: app.user.name}) }}" class="btn btn-primary">Supprimer l'image</a>
+
             {% endif %}
             <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
         {{ form_end(userForm) }}
@@ -16,6 +18,6 @@
 {% endblock %}
 
 {% block title %}
-    {{ parent() }} | Modification du profil
+     | Modification du profil
 {% endblock %}
 
