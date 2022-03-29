@@ -3,14 +3,23 @@
 {% block body %}
     <div class="container">
 
+
         {{ form_start(petshopForm) }}
         {{ form_widget(petshopForm) }}
-            {% if petshop.imageName %}
-                <a href="{{ path('delete_petshop_image', {id: petshop.id}) }}" class="btn btn-primary">Supprimer l'image</a>
-            {% endif %}
-                <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
-                <a href="{{ path('delete_petshop', {id: petshop.id}) }}" class="btn btn-danger">Supprimer {{ petshop.name }}</a>
+        <button type="submit" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
+        <a href="{{ path('petshop_details', {slug: petshop.slug}) }}" class="btn btn-primary">Retour</a>
         {{ form_end(petshopForm) }}
+            {% if petshop.imageName %}
+                <form action="{{ path('delete_petshop_image', {id: petshop.id}) }}" method="post">
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-image') }}">
+                    <button class="btn btn-danger">Supprimer l'image</button>
+                </form>
+            {% endif %}
+                <form action="{{ path('delete_petshop', {id: petshop.id}) }}" method="post">
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-petshop') }}">
+                    <button class="btn btn-danger" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Supprimer {{ petshop.name }}</button>
+                </form>
+
 
     </div>
 {% endblock %}

@@ -5,12 +5,21 @@
 
         {{ form_start(horseSchleichForm) }}
         {{ form_widget(horseSchleichForm) }}
-            {% if horseSchleich.imageName %}
-                <a href="{{ path('delete_horse_schleich_image', {id: horseSchleich.id}) }}" class="btn btn-primary">Supprimer l'image</a>
-            {% endif %}
-                <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
-                <a href="{{ path('delete_horse_schleich', {id: horseSchleich.id})}}" class="btn btn-danger">Supprimer {{ horseSchleich.name }}</a>
+        <button type="submit" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
+        <a href="{{ path('horse_schleich_details', {slug: horseSchleich.slug}) }}" class="btn btn-primary">Retour</a>
         {{ form_end(horseSchleichForm) }}
+            {% if horseSchleich.imageName %}
+                <form action="{{  path('delete_horse_schleich_image', {id: horseSchleich.id}) }}" method="post">
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-image') }}">
+                    <button type="submit" class="btn btn-danger">Supprimer l'image</button>
+                </form>
+            {% endif %}
+                <form action="{{ path('delete_horse_schleich', {id: horseSchleich.id}) }}" method="post">
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-horse-schleich') }}">
+                    <button type="submit" class="btn btn-danger">Supprimer {{ horseSchleich.name }}</button>
+                </form>
+
+
 
     </div>
 {% endblock %}

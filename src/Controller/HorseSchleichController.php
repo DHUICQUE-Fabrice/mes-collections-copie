@@ -110,9 +110,7 @@ class HorseSchleichController extends AbstractController
                                       EntityManagerInterface  $entityManager,
                                       HorseSchleichRepository $horseSchleichRepository){
         $horseSchleich = $horseSchleichRepository->find($id);
-
         $this->denyAccessUnlessGranted('edit', $horseSchleich);
-
         $horseSchleichForm = $this->createForm(HorseSchleichType::class, $horseSchleich);
         $horseSchleichForm->handleRequest($request);
         if ($horseSchleichForm->isSubmitted() && $horseSchleichForm->isValid()){
@@ -134,15 +132,23 @@ class HorseSchleichController extends AbstractController
      * @param HorseSchleichRepository $horseSchleichRepository
      * @return Response
      */
-    public function delete(int $id,AlertServiceInterface $alertService, EntityManagerInterface $entityManager, HorseSchleichRepository $horseSchleichRepository): Response
+    public function delete(int $id,
+                           AlertServiceInterface $alertService,
+                           EntityManagerInterface $entityManager,
+                           Request $request,
+                           HorseSchleichRepository $horseSchleichRepository): Response
     {
         $horseSchleich = $horseSchleichRepository->find($id);
         /** @var $user User */
         $user = $this->getUser();
         $this->denyAccessUnlessGranted('delete', $horseSchleich);
-        $entityManager->remove($horseSchleich);
-        $alertService->success(sprintf('<b>%s</b> a bien été supprimé !', $horseSchleich->getName()));
-        $entityManager->flush();
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('delete-horse-schleich', $token)){
+            $entityManager->remove($horseSchleich);
+            $alertService->success(sprintf('<b>%s</b> a bien été supprimé !', $horseSchleich->getName()));
+            $entityManager->flush();
+        }
+
         return $this->redirectToRoute('profile', ['name' => $user->getName()]);
     }
 
@@ -154,14 +160,22 @@ class HorseSchleichController extends AbstractController
      * @param HorseSchleichRepository $horseSchleichRepository
      * @return Response
      */
-    public function deleteImage(int $id, AlertServiceInterface $alertService, EntityManagerInterface $entityManager, HorseSchleichRepository $horseSchleichRepository): Response
+    public function deleteImage(int $id,
+                                AlertServiceInterface $alertService,
+                                EntityManagerInterface $entityManager,
+                                Request $request,
+                                HorseSchleichRepository $horseSchleichRepository): Response
     {
         $horseSchleich = $horseSchleichRepository->find($id);
         $this->denyAccessUnlessGranted('edit', $horseSchleich);
-        $horseSchleich->setImageName(null);
-        $entityManager->persist($horseSchleich);
-        $alertService->success('L\'image a bien été supprimée !');
-        $entityManager->flush();
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('delete-image', $token)){
+            $horseSchleich->setImageName(null);
+            $entityManager->persist($horseSchleich);
+            $alertService->success('L\'image a bien été supprimée !');
+            $entityManager->flush();
+        }
+
         return $this->redirectToRoute('horse_schleich_details', ['id' => $id, 'slug' => $horseSchleich->getSlug()]);
     }
 }

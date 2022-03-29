@@ -98,9 +98,10 @@ class UserController extends AbstractController
                                 EntityManagerInterface $entityManager,
                                 Request $request){
         $user = $userRepository->findOneBy(['name' => $name]);
-
         $this->denyAccessUnlessGranted('edit', $user);
-        if ($user !== null) {
+
+        $token = $request->request->get('token');
+        if ($user !== null && $this->isCsrfTokenValid('delete-image', $token)){
             $user->setImageName(null);
             $entityManager->persist($user);
             $entityManager->flush();

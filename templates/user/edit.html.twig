@@ -7,9 +7,10 @@
         {{ form_start(userForm) }}
         {{ form_widget(userForm) }}
             {% if app.user.imageName %}
-
-                <a href="{{ path('delete_profile_image', {name: app.user.name}) }}" class="btn btn-primary">Supprimer l'image</a>
-
+                <form action="{{ path('delete_profile_image', {name: app.user.name}) }}" method="post">
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-image') }}">
+                    <button type="submit" class="btn btn-danger">Supprimer l'image</button>
+                </form>
             {% endif %}
             <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
         {{ form_end(userForm) }}

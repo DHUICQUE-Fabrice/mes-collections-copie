@@ -6,14 +6,12 @@ use App\Entity\ObjectFamily;
 use App\Entity\Petshop;
 use App\Entity\User;
 use App\Form\PetshopType;
-use App\Repository\ObjectFamilyRepository;
 use App\Repository\PetshopRepository;
 use App\Service\AlertServiceInterface;
 use App\Service\PaginatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -146,6 +144,7 @@ class PetshopsController extends AbstractController
      */
     public function delete(int $id,
                           EntityManagerInterface $entityManager,
+                          Request $request,
                           AlertServiceInterface $alertService,
                           PetshopRepository      $petshopRepository): Response
     {
@@ -153,9 +152,12 @@ class PetshopsController extends AbstractController
         /** @var $user User */
         $user = $this->getUser();
         $this->denyAccessUnlessGranted('delete', $petshop);
-        $entityManager->remove($petshop);
-        $alertService->success(sprintf('<b>%s</b> a bien été supprimé !', $petshop->getName()));
-        $entityManager->flush();
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('delete-petshop', $token)) {
+            $entityManager->remove($petshop);
+            $entityManager->flush();
+            $alertService->success(sprintf('<b>%s</b> a bien été supprimé !', $petshop->getName()));
+        }
         return $this->redirectToRoute('profile', ['name' => $user->getName()]);
     }
 
@@ -170,14 +172,18 @@ class PetshopsController extends AbstractController
     public function deleteImage(int $id,
                                 EntityManagerInterface $entityManager,
                                 AlertServiceInterface $alertService,
-                                PetshopRepository      $petshopRepository): Response
+                                PetshopRepository      $petshopRepository,
+                                Request $request): Response
     {
         $petshop = $petshopRepository->find($id);
         $this->denyAccessUnlessGranted('edit', $petshop);
-        $petshop->setImageName(null);
-        $entityManager->persist($petshop);
-        $alertService->success('L\'image a bien été supprimée !');
-        $entityManager->flush();
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('delete-image', $token)) {
+            $petshop->setImageName(null);
+            $entityManager->persist($petshop);
+            $alertService->success('L\'image a bien été supprimée !');
+            $entityManager->flush();
+        }
         return $this->redirectToRoute('petshop_details', ['id' => $id, 'slug' => $petshop->getSlug()]);
     }
 
