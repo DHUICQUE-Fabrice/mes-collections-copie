@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}
  | Nouveau Petshop
 {% endblock %}
 
 {% block body %}
     <div class="container">
+
         {{ form_start(form) }}
             {{ form_widget(form) }}
             <div class="row">
@@ -15,6 +17,7 @@
             </div>
         {{ form_end(form) }}
         <p>Si vous pensez qu'il manque des éléments (par exemple espèce animale), n'hésitez pas à passer par le formulaire de <a href="{{ path('contact') }}">Contact</a></p>
+
     </div>
 {% endblock %}
 

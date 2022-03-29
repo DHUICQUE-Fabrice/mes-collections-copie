@@ -2,8 +2,6 @@
 
 {% block body %}
     <div class="container">
-
-
         {{ form_start(petshopForm) }}
         {{ form_widget(petshopForm) }}
         <button type="submit" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
@@ -12,15 +10,13 @@
             {% if petshop.imageName %}
                 <form action="{{ path('delete_petshop_image', {id: petshop.id}) }}" method="post">
                     <input type="hidden" name="token" value="{{ csrf_token('delete-image') }}">
-                    <button class="btn btn-danger">Supprimer l'image</button>
+                    <button type="submit" class="btn btn-danger" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Supprimer l'image</button>
                 </form>
             {% endif %}
                 <form action="{{ path('delete_petshop', {id: petshop.id}) }}" method="post">
                     <input type="hidden" name="token" value="{{ csrf_token('delete-petshop') }}">
-                    <button class="btn btn-danger" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Supprimer {{ petshop.name }}</button>
+                    <button type="submit" class="btn btn-danger" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Supprimer {{ petshop.name }}</button>
                 </form>
-
-
     </div>
 {% endblock %}
 

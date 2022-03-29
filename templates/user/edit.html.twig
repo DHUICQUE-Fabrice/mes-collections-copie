@@ -6,14 +6,15 @@
     <div class="container">
         {{ form_start(userForm) }}
         {{ form_widget(userForm) }}
+        <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
+        {{ form_end(userForm) }}
             {% if app.user.imageName %}
                 <form action="{{ path('delete_profile_image', {name: app.user.name}) }}" method="post">
                     <input type="hidden" name="token" value="{{ csrf_token('delete-image') }}">
-                    <button type="submit" class="btn btn-danger">Supprimer l'image</button>
+                    <button type="submit" class="btn btn-danger" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Supprimer l'image</button>
                 </form>
             {% endif %}
-            <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
-        {{ form_end(userForm) }}
+
     </div>
     <p class="text-center">Pour modifier votre mot de passe, veuillez utiliser le lien "Mot de passe oublié" sur la page de connexion.</p>
 {% endblock %}
