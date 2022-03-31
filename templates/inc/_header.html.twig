@@ -4,20 +4,13 @@
 
            <a class="navbar-brand-custom" href="/">
                <img src="{{ asset('build/images/logo.png') }}" alt="{{ 'Mes collections' }}" width="100%">
-               {# !!! Following lines are to regenerate logo with right colors if needed (to delete in production) !!! #}
-
-{#                     Mes Collect#}
-{#                <span style="margin: -10px;color: #44f82c">i</span>#}
-{#                <span style="margin: -5px;color: #4be7f7">o</span>#}
-{#                <span style="margin: -6px;color: #634af8">n</span>#}
-{#                <span style="margin: -7px;color: #fb47e6">s</span>#}
-            </a>
+           </a>
             <div class="col-1"></div>
 
             {% if app.user %}
             <div class="col-2">
                 <a href="{{ path('create_new') }}" class="d-block text-center" aria-expanded="false" title="Nouveau">
-                    <i class="fa-solid fa-folder-plus" style="font-size: 3rem" title="Nouveau"></i>
+                    <i class="fa-solid fa-folder-plus link-secondary" style="font-size: 3rem" title="Nouveau"></i>
                 </a>
             </div>
             {% endif %}
@@ -39,9 +32,9 @@
                 </ul>
             </div>
             <div class="col-2">
-                <a href="{{ path('contact') }}" title="Contact" class="d-block text-decoration-none text-center" aria-expanded="false">Contact</a>
+                <a href="{{ path('contact') }}" title="Contact" class="d-block text-decoration-none text-center link-secondary" aria-expanded="false">Contact</a>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('admin') }}" title="Admin" class="d-block text-decoration-none text-center" aria-expanded="false">Admin</a>
+                    <a href="{{ path('admin') }}" title="Admin" class="d-block text-decoration-none text-center link-secondary" aria-expanded="false">Admin</a>
                 {% endif %}
             </div>
         </div>

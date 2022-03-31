@@ -9,13 +9,14 @@
         {{ form_end(petshopForm) }}
             {% if petshop.imageName %}
                 <form action="{{ path('delete_petshop_image', {id: petshop.id}) }}" method="post">
-                    <input type="hidden" name="token" value="{{ csrf_token('delete-image') }}">
-                    <button type="submit" class="btn btn-danger" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Supprimer l'image</button>
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-image' ~ petshop.id) }}">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')">Supprimer l'image</button>
                 </form>
             {% endif %}
                 <form action="{{ path('delete_petshop', {id: petshop.id}) }}" method="post">
-                    <input type="hidden" name="token" value="{{ csrf_token('delete-petshop') }}">
-                    <button type="submit" class="btn btn-danger" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Supprimer {{ petshop.name }}</button>
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-petshop' ~ petshop.id) }}">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer {{ petshop.name }} ? Ceci sera définitif !')">Supprimer
+                        {{ petshop.name }}</button>
                 </form>
     </div>
 {% endblock %}

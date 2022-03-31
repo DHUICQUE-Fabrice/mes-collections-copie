@@ -9,23 +9,12 @@ $text-color:    #0F056B;
 $font-family-base: 'Broadway', sans-serif;
 $font-family-text: 'Bahnschrift', sans-serif;
 
-//$grid-breakpoints: (
-//        xs: 320px,
-//        sm: 576px,
-//        md: 768px,
-//        lg: 992px,
-//        xl: 1200px,
-//        xxl: 1400px
-//) !default;
+// Colors used in logo
+$customIColor:#44f82c;
+$customOColor:#4be7f7;
+$customNColor:#634af8;
+$customSColor:#fb47e6;
 
-//$container-max-widths: (
-//        xs: 320px,
-//        sm: 540px,
-//        md: 720px,
-//        lg: 960px,
-//        xl: 1140px,
-//        xxl: 1320px
-//) !default;
 
 body{
   background-image: linear-gradient(to bottom, #44f82c, #44f82c);
@@ -33,7 +22,8 @@ body{
   margin: 0;
   overflow-x: hidden;
   font-family: $font-family-base;
-  color: #4D7298;
+  //color: #4D7298;
+  color: $text-color;
   height: 100%;
 }
 
@@ -63,6 +53,7 @@ p, footer a, input, textarea{
 .text-container-custom p {
   padding: 0;
   margin: 0;
+  color: $text-color;
 }
 
 .text-box-custom{
@@ -72,14 +63,11 @@ p, footer a, input, textarea{
   justify-content: space-between;
   align-items: center;
   border-radius: 0.5rem;
-  //background: #ABE86E;
   box-shadow: 0 0.5rem 1rem $text-color;
 }
 
 .image-box-custom, .image-box-custom>a>img{
   crop: auto;
-  //border-radius: 75px;
-  //border: 1px solid $text-color;
   width: 150px;
   height: 150px;
 }
@@ -94,7 +82,6 @@ p, footer a, input, textarea{
 }
 .btn-primary{
   border: 1px solid $text-color;
-
   color: $text-color;
 }
 .btn-right{

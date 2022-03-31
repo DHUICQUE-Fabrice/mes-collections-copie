@@ -10,8 +10,8 @@
         {{ form_end(userForm) }}
             {% if app.user.imageName %}
                 <form action="{{ path('delete_profile_image', {name: app.user.name}) }}" method="post">
-                    <input type="hidden" name="token" value="{{ csrf_token('delete-image') }}">
-                    <button type="submit" class="btn btn-danger" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Supprimer l'image</button>
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-image' ~ app.user.id) }}">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')">Supprimer l'image</button>
                 </form>
             {% endif %}
 

@@ -12,10 +12,10 @@ use App\Service\PaginatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class HorseSchleichController extends AbstractController
 {
@@ -100,82 +100,78 @@ class HorseSchleichController extends AbstractController
 
     /**
      * @Route ("/modifier/schleich/{id}", name="edit_horseschleich")
-     * @param int $id
+     * @param HorseSchleich $horseSchleich
      * @param Request $request
      * @param EntityManagerInterface $entityManager
-     * @param HorseSchleichRepository $horseSchleichRepository
-     * @return RedirectResponse|Response
+     * @return Response
      */
-    public function editHorseSchleich(int                     $id, Request $request,
-                                      EntityManagerInterface  $entityManager,
-                                      HorseSchleichRepository $horseSchleichRepository){
-        $horseSchleich = $horseSchleichRepository->find($id);
+    public function editHorseSchleich(HorseSchleich $horseSchleich,
+                                      Request $request,
+                                      EntityManagerInterface  $entityManager):Response{
         $this->denyAccessUnlessGranted('edit', $horseSchleich);
         $horseSchleichForm = $this->createForm(HorseSchleichType::class, $horseSchleich);
         $horseSchleichForm->handleRequest($request);
         if ($horseSchleichForm->isSubmitted() && $horseSchleichForm->isValid()){
             $entityManager->persist($horseSchleich);
             $entityManager->flush();
-            return $this->redirectToRoute('horse_schleich_details', ['id'=>$id, 'slug'=>$horseSchleich->getSlug()]);
+            return $this->redirectToRoute('horse_schleich_details', ['slug'=>$horseSchleich->getSlug()]);
         }
         return $this->render('horse_schleich/edit.html.twig',[
             'horseSchleichForm' => $horseSchleichForm->createView(),
-            'horseSchleich' => $horseSchleich
+            'horseSchleich' => $horseSchleich,
         ]);
     }
 
     /**
      * @Route ("/supprimer/schleich/{id}", name="delete_horse_schleich")
-     * @param int $id
+     * @param HorseSchleich $horseSchleich
      * @param AlertServiceInterface $alertService
      * @param EntityManagerInterface $entityManager
-     * @param HorseSchleichRepository $horseSchleichRepository
+     * @param Request $request
      * @return Response
      */
-    public function delete(int $id,
+    public function delete(HorseSchleich $horseSchleich,
                            AlertServiceInterface $alertService,
                            EntityManagerInterface $entityManager,
-                           Request $request,
-                           HorseSchleichRepository $horseSchleichRepository): Response
+                           Request $request): Response
     {
-        $horseSchleich = $horseSchleichRepository->find($id);
         /** @var $user User */
         $user = $this->getUser();
         $this->denyAccessUnlessGranted('delete', $horseSchleich);
-        $token = $request->request->get('token');
-        if ($this->isCsrfTokenValid('delete-horse-schleich', $token)){
-            $entityManager->remove($horseSchleich);
-            $alertService->success(sprintf('<b>%s</b> a bien été supprimé !', $horseSchleich->getName()));
-            $entityManager->flush();
+
+        if (!$this->isCsrfTokenValid('delete-horse-schleich'.$horseSchleich->getId(), $request->request->get('token'))){
+            throw new InvalidCsrfTokenException();
         }
+        $entityManager->remove($horseSchleich);
+        $alertService->success(sprintf('<b>%s</b> a bien été supprimé !', $horseSchleich->getName()));
+        $entityManager->flush();
 
         return $this->redirectToRoute('profile', ['name' => $user->getName()]);
     }
 
     /**
      * @Route ("/schleich/{id}/delete/image", name="delete_horse_schleich_image")
-     * @param int $id
+     * @param HorseSchleich $horseSchleich
      * @param AlertServiceInterface $alertService
      * @param EntityManagerInterface $entityManager
-     * @param HorseSchleichRepository $horseSchleichRepository
+     * @param Request $request
      * @return Response
      */
-    public function deleteImage(int $id,
+    public function deleteImage(HorseSchleich $horseSchleich,
                                 AlertServiceInterface $alertService,
                                 EntityManagerInterface $entityManager,
-                                Request $request,
-                                HorseSchleichRepository $horseSchleichRepository): Response
+                                Request $request): Response
     {
-        $horseSchleich = $horseSchleichRepository->find($id);
         $this->denyAccessUnlessGranted('edit', $horseSchleich);
-        $token = $request->request->get('token');
-        if ($this->isCsrfTokenValid('delete-image', $token)){
-            $horseSchleich->setImageName(null);
-            $entityManager->persist($horseSchleich);
-            $alertService->success('L\'image a bien été supprimée !');
-            $entityManager->flush();
-        }
 
-        return $this->redirectToRoute('horse_schleich_details', ['id' => $id, 'slug' => $horseSchleich->getSlug()]);
+        if (!$this->isCsrfTokenValid('delete-image'.$horseSchleich->getId(), $request->request->get('token'))){
+            throw new InvalidCsrfTokenException();
+        }
+        $horseSchleich->setImageName(null);
+        $entityManager->persist($horseSchleich);
+        $alertService->success('L\'image a bien été supprimée !');
+        $entityManager->flush();
+
+        return $this->redirectToRoute('horse_schleich_details', ['slug' => $horseSchleich->getSlug()]);
     }
 }

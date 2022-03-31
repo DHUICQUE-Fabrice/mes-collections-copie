@@ -30,7 +30,7 @@
                         <div class="card-flyer">
                             <div class="text-box">
                                 <div class="image-box">
-                                    <img src="https://picsum.photos/300/200" alt="Les chevaux Schleich" />
+                                    <img src="{{ asset('build/images/image_horse_schleich_group.jpg') | imagine_filter('miniature_big')}}" alt="Les chevaux Schleich" />
                                 </div>
                                 <div class="text-container">
                                     <h6>Les chevaux Schleich</h6>
@@ -41,11 +41,11 @@
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col xl-2">
-                    <a href="{{ path('contact') }}" title="Les chevaux Schleich">
+                    <a href="{{ path('contact') }}" title="Nouvelle collection">
                         <div class="card-flyer">
                             <div class="text-box">
                                 <div class="image-box">
-                                    <img src="https://picsum.photos/300/200" alt="Les chevaux Schleich" />
+                                    <img src="{{ asset('build/images/image_nouvelle_collection.jpg') | imagine_filter('miniature_big')}}" alt="Proposer une nouvelle collection" />
                                 </div>
                                 <div class="text-container">
                                     <h6>Nouvelle collection</h6>

@@ -2,34 +2,32 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\HorseSchleichRepository;
 use App\Repository\PetshopRepository;
-use App\Repository\UserRepository;
 use App\Service\AlertServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class UserController extends AbstractController
 {
 
     /**
      * @Route("/profil/{name}", name="profile")
-     * @param string $name
-     * @param UserRepository $userRepository
+     * @param User $user
      * @param PetshopRepository $petshopRepository
      * @param HorseSchleichRepository $horseSchleichRepository
      * @param PaginatorInterface $paginator
      * @param Request $request
      * @return Response
      */
-    public function profile(string                  $name,
-                            UserRepository          $userRepository,
+    public function profile(User $user,
                             PetshopRepository       $petshopRepository,
                             HorseSchleichRepository $horseSchleichRepository,
                             PaginatorInterface      $paginator,
@@ -37,7 +35,6 @@ class UserController extends AbstractController
                             ): Response
     {
 
-        $user = $userRepository->findOneBy(['name' => $name]);
         $petshops = $petshopRepository->findBy(['user' => $user]);
         $horseSchleiches = $horseSchleichRepository->findBy(['user' => $user]);
 
@@ -56,18 +53,16 @@ class UserController extends AbstractController
 
     /**
      * @Route("/profil/{name}/modifier", name="editProfile")
-     * @param string $name
-     * @param UserRepository $userRepository
+     * @param User $user
+     * @param AlertServiceInterface $alertService
      * @param EntityManagerInterface $entityManager
      * @param Request $request
-     * @return RedirectResponse|Response
+     * @return Response
      */
-    public function editProfile(string                      $name,
+    public function editProfile(User $user,
                                 AlertServiceInterface    $alertService,
-                                UserRepository              $userRepository,
                                 EntityManagerInterface      $entityManager,
-                                Request                     $request){
-        $user = $userRepository->findOneBy(['name' => $name]);
+                                Request                     $request):Response{
         $this->denyAccessUnlessGranted('edit', $user);
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
@@ -87,26 +82,25 @@ class UserController extends AbstractController
 
     /**
      * @Route("/profil/{name}/supprimer", name="delete_profile_image")
-     * @param string $name
-     * @param UserRepository $userRepository
+     * @param User $user
+     * @param AlertServiceInterface $alertService
      * @param EntityManagerInterface $entityManager
-     * @return RedirectResponse
+     * @param Request $request
+     * @return Response
      */
-    public function deleteImage(string $name,
-                                UserRepository $userRepository,
+    public function deleteImage(User $user,
                                 AlertServiceInterface $alertService,
                                 EntityManagerInterface $entityManager,
-                                Request $request){
-        $user = $userRepository->findOneBy(['name' => $name]);
+                                Request $request):Response{
         $this->denyAccessUnlessGranted('edit', $user);
 
-        $token = $request->request->get('token');
-        if ($user !== null && $this->isCsrfTokenValid('delete-image', $token)){
-            $user->setImageName(null);
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $alertService->success('Image supprimée avec succès');
+        if (!$this->isCsrfTokenValid('delete-image'. $user->getId(), $request->request->get('token'))){
+            throw new InvalidCsrfTokenException();
         }
+        $user->setImageName(null);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $alertService->success('Image supprimée avec succès');
 
         return $this->redirectToRoute('editProfile', [
             'name' => $user->getName()
