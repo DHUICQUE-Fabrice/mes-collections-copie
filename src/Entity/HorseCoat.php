@@ -6,6 +6,7 @@ use App\Repository\HorseCoatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=HorseCoatRepository::class)
@@ -32,7 +33,7 @@ class HorseCoat
      */
     private Collection $horseSchleiches;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->horseSchleiches = new ArrayCollection();
     }
@@ -91,20 +92,10 @@ class HorseCoat
      */
     public function removeHorseSchleich($horseSchleich): HorseCoat
     {
-        if ($this->horseSchleiches->removeElement($horseSchleich)) {
-            if ($horseSchleich->getCoat() === $this) {
-                $horseSchleich->setCoat(null);
-            }
+        if ($this->horseSchleiches->removeElement($horseSchleich) && $horseSchleich->getCoat() === $this) {
+            $horseSchleich->setCoat(null);
         }
         return $this;
     }
 
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getName();
-    }
 }

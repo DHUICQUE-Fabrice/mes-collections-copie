@@ -108,10 +108,10 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         $objectFamilyPetshop = new ObjectFamily();
-        $objectFamilyPetshop->setName('Petshop');
+        $objectFamilyPetshop->setLabel('Petshop');
         $manager->persist($objectFamilyPetshop);
         $objectFamilySchleich = new ObjectFamily();
-        $objectFamilySchleich->setName('HorseSchleich');
+        $objectFamilySchleich->setLabel('Schleich');
         $manager->persist($objectFamilySchleich);
         $manager->flush();
 
@@ -140,13 +140,14 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    private function makeUsers(Generator $faker, ObjectManager $manager){
+    private function makeUsers(Generator $faker, ObjectManager $manager): void
+    {
         for ($i = 0 ; $i < 10 ; $i++){
             $user = new User();
             $user->setEmail($faker->unique()->email())
                 ->setName($faker->unique()->userName())
                 ->setAbout($faker->realText)
-                ->setRegisteredAt(($faker->dateTimeBetween('- 1 year', '- 1 month')))
+                ->setCreatedAt($faker->dateTimeBetween('- 1 year', '- 1 month'))
                 ->setRoles(['ROLE_USER']);
             $password =  $this->encoder->hashPassword($user, $user->getName());
             $user->setPassword($password);
@@ -160,7 +161,8 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    private function makePetshopSpecies(Generator $faker, ObjectManager $manager){
+    private function makePetshopSpecies(Generator $faker, ObjectManager $manager): void
+    {
         for($i=0;$i<10;$i++){
             $species = new PetshopSpecies();
             $species->setName($faker->firstName());
@@ -173,7 +175,8 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    private function makePetshopSizes(Generator $faker, ObjectManager $manager){
+    private function makePetshopSizes(Generator $faker, ObjectManager $manager): void
+    {
         for($i=0;$i<4;$i++){
             $size = new PetshopSize();
             $size->setName($faker->word());
@@ -186,7 +189,8 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    private function makePetshops(Generator $faker, ObjectManager $manager){
+    private function makePetshops(Generator $faker, ObjectManager $manager): void
+    {
         $users = $this->userRepository->findAll();
         $sizes = $this->petshopSizeRepository->findAll();
         $species = $this->petshopSpeciesRepository->findAll();
@@ -198,7 +202,7 @@ class AppFixtures extends Fixture
                 ->setUser($faker->randomElement($users))
                 ->setSpecies($faker->randomElement($species))
                 ->setSize($faker->randomElement($sizes))
-                ->setCreatedAt($faker->dateTimeBetween($petshop->getUser()->getRegisteredAt(), 'now'))
+                ->setCreatedAt($faker->dateTimeBetween($petshop->getUser()->getCreatedAt()))
                 ->setObjectFamily($objectFamily);
 
             $manager->persist($petshop);
@@ -210,7 +214,8 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    private function makeHorseSpecies(Generator $faker, ObjectManager $manager){
+    private function makeHorseSpecies(Generator $faker, ObjectManager $manager): void
+    {
         for($i=0;$i<10;$i++){
             $species = new HorseSpecies();
             $species->setName($faker->word());
@@ -223,7 +228,8 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    private function makeHorseType(Generator $faker, ObjectManager $manager){
+    private function makeHorseType(Generator $faker, ObjectManager $manager): void
+    {
         for($i=0;$i<5;$i++){
             $type = new HorseType();
             $type->setName($faker->word());
@@ -236,7 +242,8 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    private function makeHorseCoat(Generator $faker, ObjectManager $manager){
+    private function makeHorseCoat(Generator $faker, ObjectManager $manager): void
+    {
         for($i=0;$i<5;$i++){
             $coat = new HorseCoat();
             $coat->setName($faker->word());
@@ -249,7 +256,8 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    private function makeHorseSchleiches(Generator $faker, ObjectManager $manager){
+    private function makeHorseSchleiches(Generator $faker, ObjectManager $manager): void
+    {
         $users = $this->userRepository->findAll();
         $coats = $this->horseCoatRepository->findAll();
         $types = $this->horseTypeRepository->findAll();
@@ -264,7 +272,7 @@ class AppFixtures extends Fixture
                 ->setSpecies($faker->randomElement($species))
                 ->setCoat($faker->randomElement($coats))
                 ->setType($faker->randomElement($types))
-                ->setCreatedAt($faker->dateTimeBetween($schleich->getUser()->getRegisteredAt(), 'now'))
+                ->setCreatedAt($faker->dateTimeBetween($schleich->getUser()->getCreatedAt()))
                 ->setObjectFamily($objectFamily);
             $manager->persist($schleich);
         }

@@ -22,12 +22,9 @@ trait ReferentialTrait
 
     /**
      * @param string|null $label
-     * @return $this
      */
-    public function setLabel(?string $label): self
+    public function setLabel(?string $label): void
     {
         $this->label = $label;
-
-        return $this;
     }
 }

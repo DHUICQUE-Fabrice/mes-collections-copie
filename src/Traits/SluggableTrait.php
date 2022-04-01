@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -23,12 +24,9 @@ trait SluggableTrait
 
     /**
      * @param string|null $slug
-     * @return $this
      */
-    public function setSlug(?string $slug): self
+    public function setSlug(?string $slug): void
     {
         $this->slug = $slug;
-
-        return $this;
     }
 }

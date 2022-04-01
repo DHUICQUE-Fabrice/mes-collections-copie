@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\AbstractImageFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,8 +20,8 @@ class ImageFileRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @param AbstractImageFile $entity
+     * @param bool $flush
      */
     public function add(AbstractImageFile $entity, bool $flush = true): void
     {
@@ -34,8 +32,8 @@ class ImageFileRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @param AbstractImageFile $entity
+     * @param bool $flush
      */
     public function remove(AbstractImageFile $entity, bool $flush = true): void
     {

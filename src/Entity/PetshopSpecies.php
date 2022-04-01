@@ -6,6 +6,7 @@ use App\Repository\PetshopSpeciesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=PetshopSpeciesRepository::class)
@@ -31,7 +32,7 @@ class PetshopSpecies
      */
     private Collection $petshops;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->petshops = new ArrayCollection();
     }
@@ -91,19 +92,10 @@ class PetshopSpecies
      */
     public function removePetshop($petshop): PetshopSpecies
     {
-        if ($this->petshops->removeElement($petshop)) {
-            if ($petshop->getSpecies() === $this) {
-                $petshop->setSpecies(null);
-            }
+        if ($this->petshops->removeElement($petshop) && $petshop->getSpecies() === $this) {
+            $petshop->setSpecies(null);
         }
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getName();
-    }
 }

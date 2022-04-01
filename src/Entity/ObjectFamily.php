@@ -7,6 +7,7 @@ use App\Traits\ReferentialTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=ObjectFamilyRepository::class)
@@ -35,7 +36,7 @@ class ObjectFamily
      */
     private Collection $horseSchleich;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->petshop = new ArrayCollection();
         $this->horseSchleich = new ArrayCollection();
@@ -87,10 +88,8 @@ class ObjectFamily
      */
     public function removePetshop($petshop): ObjectFamily
     {
-        if ($this->petshop->removeElement($petshop)) {
-            if ($petshop->getObjectFamily() === $this) {
-                $petshop->setObjectFamily(null);
-            }
+        if ($this->petshop->removeElement($petshop) && $petshop->getObjectFamily() === $this) {
+            $petshop->setObjectFamily(null);
         }
         return $this;
     }
@@ -123,20 +122,11 @@ class ObjectFamily
      */
     public function removeHorseSchleich($horseSchleich): ObjectFamily
     {
-        if ($this->horseSchleich->removeElement($horseSchleich)) {
-            if ($horseSchleich->getObjectFamily() === $this) {
-                $horseSchleich->setObjectFamily(null);
-            }
+        if ($this->horseSchleich->removeElement($horseSchleich) && $horseSchleich->getObjectFamily() === $this) {
+            $horseSchleich->setObjectFamily(null);
         }
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getName();
-    }
 }

@@ -4,10 +4,8 @@ namespace App\Entity;
 
 use App\Repository\PetshopRepository;
 use App\Traits\SluggableTrait;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Cocur\Slugify\Slugify;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -198,7 +196,7 @@ class Petshop extends AbstractImageFile
     /**
      * @return string
      */
-    public function __toString()
+    #[Pure] public function __toString()
     {
         return $this->getName();
     }

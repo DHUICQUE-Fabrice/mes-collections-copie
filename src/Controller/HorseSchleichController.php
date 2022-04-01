@@ -10,6 +10,7 @@ use App\Repository\HorseSchleichRepository;
 use App\Service\AlertServiceInterface;
 use App\Service\PaginatorService;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ class HorseSchleichController extends AbstractController
     /**
      * @var HorseSchleichRepository
      */
-    private $repository;
+    private HorseSchleichRepository $repository;
 
     /**
      * @param HorseSchleichRepository $horseSchleichRepository
@@ -66,6 +67,7 @@ class HorseSchleichController extends AbstractController
      * @param Request $request
      * @param AlertServiceInterface $alertService
      * @return Response
+     * @throws ORMException
      */
     public function createNewHorseSchleich(EntityManagerInterface $entityManager,
                                            Request                $request,

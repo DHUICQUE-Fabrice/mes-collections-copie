@@ -13,8 +13,8 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 class ImageCacheSubscriber implements EventSubscriber
 {
 
-    private $cacheManager;
-    private $uploaderHelper;
+    private CacheManager $cacheManager;
+    private UploaderHelper $uploaderHelper;
 
     public function __construct(CacheManager $cacheManager, UploaderHelper $uploaderHelper)
     {
@@ -22,7 +22,7 @@ class ImageCacheSubscriber implements EventSubscriber
         $this->uploaderHelper = $uploaderHelper;
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return[
             'preRemove',
@@ -30,24 +30,30 @@ class ImageCacheSubscriber implements EventSubscriber
         ];
     }
 
-    public function preRemove(LifecycleEventArgs $args){
+    /**
+     * @param LifecycleEventArgs $args
+     * @return void
+     */
+    public function preRemove(LifecycleEventArgs $args): void
+    {
         $entity = $args->getEntity();
 
 
         if(!$entity instanceof AbstractImageFile){
             return;
         }
-        if ($entity->getImageFile() instanceof UploadedFile){
+        if ($entity->getFile() instanceof UploadedFile){
             $this->cacheManager->remove($this->uploaderHelper->asset($entity, 'imageFile'));
         }
     }
 
-    public function preUpdate(PreUpdateEventArgs $args){
+    public function preUpdate(PreUpdateEventArgs $args): void
+    {
         $entity = $args->getEntity();
         if(!$entity instanceof AbstractImageFile){
             return;
         }
-        if ($entity->getImageFile() instanceof UploadedFile){
+        if ($entity->getFile() instanceof UploadedFile){
             $this->cacheManager->remove($this->uploaderHelper->asset($entity, 'imageFile'));
         }
     }

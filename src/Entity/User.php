@@ -7,7 +7,7 @@ use App\Traits\SluggableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JetBrains\PhpStorm\Pure;
 use Serializable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -41,9 +41,9 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
 
     /**
      * @ORM\Column(type="json")
-     * @var ArrayCollection
+     * @var array|ArrayCollection
      */
-    private $roles = [];
+    private array|ArrayCollection $roles = [];
 
     /**
      * @var string The hashed password
@@ -88,7 +88,7 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
      */
     private ?string $resetToken;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->petshops = new ArrayCollection();
         $this->horseSchleiches = new ArrayCollection();
@@ -141,7 +141,7 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
     /**
      * @see UserInterface
      */
-    public function getRoles()
+    public function getRoles(): array|ArrayCollection
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
@@ -181,25 +181,7 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
         return $this;
     }
 
-    /**
-     * Returning a salt is only needed, if you are not using a modern
-     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
-     *
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        return null;
-    }
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
 
     /**
      * @return string
@@ -266,11 +248,9 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
      */
     public function removePetshop(Petshop $petshop): User
     {
-        if ($this->petshops->removeElement($petshop)) {
-            // set the owning side to null (unless already changed)
-            if ($petshop->getUser() === $this) {
-                $petshop->setUser(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->petshops->removeElement($petshop) && $petshop->getUser() === $this) {
+            $petshop->setUser(null);
         }
         return $this;
     }
@@ -302,22 +282,13 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
      */
     public function removeHorseSchleich(HorseSchleich $horseSchleich): User
     {
-        if ($this->horseSchleiches->removeElement($horseSchleich)) {
-            // set the owning side to null (unless already changed)
-            if ($horseSchleich->getUser() === $this) {
-                $horseSchleich->setUser(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->horseSchleiches->removeElement($horseSchleich) && $horseSchleich->getUser() === $this) {
+            $horseSchleich->setUser(null);
         }
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function __toString()
-    {
-        return $this->getName();
-    }
 
     /**
      * @return string|null
@@ -336,7 +307,7 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
      * @param $data
      * @return void
      */
-    public function unserialize($data)
+    public function unserialize($data): void
     {
         [
             $this->id,
@@ -354,5 +325,14 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
     }
 
 
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials(): void
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
 
 }

@@ -7,9 +7,12 @@ use App\Repository\UserRepository;
 use App\Service\AlertServiceInterface;
 use App\Service\MailjetService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -46,17 +49,19 @@ class SecurityController extends AbstractController
      */
     public function logout(): void
     {
-        throw new \LogicException();
+        throw new LogicException();
     }
 
     /**
      * @Route("/oubli-mot-de-passe", name="app_forgot_password")
      * @param MailerInterface $mailer
+     * @param AlertServiceInterface $alertService
      * @param UserRepository $userRepository
      * @param Request $request
      * @param TokenGeneratorInterface $tokenGenerator
      * @param EntityManagerInterface $entityManager
      * @return Response
+     * @throws TransportExceptionInterface
      */
     public function recoverPassword(MailerInterface $mailer, AlertServiceInterface $alertService, UserRepository $userRepository, Request $request, TokenGeneratorInterface $tokenGenerator, EntityManagerInterface $entityManager): Response
     {
@@ -74,7 +79,7 @@ class SecurityController extends AbstractController
                 $user->setResetToken($token);
                 $entityManager->persist($user);
                 $entityManager->flush();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $alertService->danger('Une erreur est survenue, veuillez réessayer plus tard');
                 return $this->redirectToRoute('app_login');
             }

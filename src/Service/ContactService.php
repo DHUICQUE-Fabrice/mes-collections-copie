@@ -3,16 +3,18 @@
 namespace App\Service;
 
 use App\Entity\Contact;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
 class ContactService
 {
-     private $entityManager;
-     private $flash;
-     private $mailer;
+     private EntityManagerInterface $entityManager;
+     private FlashBagInterface $flash;
+     private MailerInterface $mailer;
 
      public function __construct(
          EntityManagerInterface $entityManager,
@@ -27,14 +29,17 @@ class ContactService
      public function persistContact(Contact $contact):void
      {
          $contact->setIsSent(false)
-             ->setCreatedAt(new \DateTime());
+             ->setCreatedAt(new DateTime());
          $this->entityManager->persist($contact);
          $this->entityManager->flush();
 
          $this->flash->add('success', 'Votre message a bien été envoyé, merci.');
      }
 
-     public function isSent(Contact $contact):void{
+    /**
+     * @throws TransportExceptionInterface
+     */
+    public function isSent(Contact $contact):void{
          $contact->setIsSent(true);
          $email = (new Email())
              ->from('aelhan.dev@gmail.com')

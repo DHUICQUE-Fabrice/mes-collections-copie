@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,6 +28,7 @@ class RegistrationController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @param MailerInterface $mailerInterface
      * @return Response
+     * @throws TransportExceptionInterface
      */
     public function register(
         Request $request,
@@ -78,7 +80,8 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/cgu", name="app_cgu")
      */
-    public function cgu(){
+    public function cgu(): Response
+    {
         return $this->render('registration/cgu.html.twig');
     }
 }

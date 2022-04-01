@@ -8,6 +8,7 @@ use App\Service\ContactService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ContactController extends AbstractController
@@ -18,6 +19,7 @@ class ContactController extends AbstractController
      * @param Request $request
      * @param ContactService $contactService
      * @return Response
+     * @throws TransportExceptionInterface
      */
     public function index(Request $request, ContactService $contactService): Response
     {
