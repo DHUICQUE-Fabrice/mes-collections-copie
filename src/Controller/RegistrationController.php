@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
+use App\Service\AlertServiceInterface;
 use App\Service\MailjetService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
@@ -23,24 +25,16 @@ class RegistrationController extends AbstractController
      * @Route("/register", name="app_register")
      * @param Request $request
      * @param UserPasswordHasherInterface $userPasswordHasher
-     * @param UserAuthenticatorInterface $userAuthenticator
-     * @param UserAuthenticator $authenticator
      * @param EntityManagerInterface $entityManager
-     * @param MailerInterface $mailerInterface
      * @return Response
-     * @throws TransportExceptionInterface
      */
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        UserAuthenticatorInterface $userAuthenticator,
-        UserAuthenticator $authenticator,
         EntityManagerInterface $entityManager,
-        MailerInterface $mailerInterface
     ): Response
     {
         $user = new User();
-        //$user->setRegisteredAt(new \DateTime());
         $user->setRoles(['ROLE_USER']);
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -58,23 +52,49 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $mailer = new MailjetService($mailerInterface);
-            $sender = 'aelhan.dev@gmail.com';
-            $receiver = 'aelhan.dev@gmail.com';
-            $subject = $user->getName() . ' vient de s\'inscrire !';
-            $message = 'Nouvel utilisateur ' . $user->getName()
-                . ' ; Adresse mail : ' . $user->getEmail();
-            $mailer->sendEmail($sender,$receiver,$subject,$message);
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            return $this->redirectToRoute('register_email',
+            [
+                'user' => $user,
+            ]);
         }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param UserAuthenticator $authenticator
+     * @param UserAuthenticatorInterface $userAuthenticator
+     * @param MailerInterface $mailer
+     * @param AlertServiceInterface $alertService
+     * @param User $user
+     * @return Response|null
+     * @throws TransportExceptionInterface
+     */
+    #[Route("/register/email", name:"register_email")]
+    public function sendEmailRegister(Request $request,
+                                      UserAuthenticator $authenticator,
+                                      UserAuthenticatorInterface $userAuthenticator,
+                                      MailerInterface $mailer,
+                                      AlertServiceInterface $alertService,
+                                      User $user)
+    {
+        $email = (new Email())
+            ->from($this->getParameter('admin_email'))
+            ->to($this->getParameter('admin_email'))
+            ->subject('Nouvel utilisateur')
+            ->text($user->getName() . ' vient de s\'inscrire sur le site');
+
+        $mailer->send($email);
+        $alertService->success('Votre compte a bien été créé, vous pouvez vous connecter');
+
+        return $userAuthenticator->authenticateUser(
+            $user,
+            $authenticator,
+            $request,
+        );
     }
 
     /**
