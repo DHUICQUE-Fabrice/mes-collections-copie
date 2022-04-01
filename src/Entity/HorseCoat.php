@@ -98,4 +98,12 @@ class HorseCoat
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
 }

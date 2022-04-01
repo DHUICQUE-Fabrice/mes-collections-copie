@@ -40,8 +40,7 @@ class UserCrudController extends AbstractCrudController
             TextareaField::new('about'),
             AssociationField::new('petshops')->onlyOnIndex(),
             AssociationField::new('horseSchleiches')->onlyOnIndex(),
-            DateField::new('registeredAt')->hideOnForm(),
-            CollectionField::new('imageFile', 'Fichier')->setEntryType(ImageFileType::class)
+            DateField::new('createdAt')->hideOnForm(),
         ];
     }
 
@@ -51,7 +50,7 @@ class UserCrudController extends AbstractCrudController
      */
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setDefaultSort(['registeredAt' => 'DESC']);
+        return $crud->setDefaultSort(['createdAt' => 'DESC']);
     }
 
 }
