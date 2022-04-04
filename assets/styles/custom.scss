@@ -88,6 +88,34 @@ p, footer a, input, textarea{
   float: right;
 }
 
+.rectangle {
+  width  : 15rem;
+  height : 25rem;
+  border: 1px solid $text-color;
+  border-radius: 0.5rem;
+}
+
+.rectangle img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card-custom{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #eee;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 3rem;
+  box-shadow: 0 0.5rem 1rem $text-color;
+  padding: 2rem;
+  margin: 2rem;
+}
+
 .navbar-brand-custom{
  float: left;
   font-size: 4rem;

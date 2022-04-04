@@ -51,10 +51,9 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-
             return $this->redirectToRoute('register_email',
             [
-                'user' => $user,
+                'id' => $user->getId(),
             ]);
         }
 
@@ -73,13 +72,14 @@ class RegistrationController extends AbstractController
      * @return Response|null
      * @throws TransportExceptionInterface
      */
-    #[Route("/register/email", name:"register_email")]
-    public function sendEmailRegister(Request $request,
+    #[Route("/register/email/{id}", name:"register_email")]
+    public function sendEmailRegister(User $user,
+                                      Request $request,
                                       UserAuthenticator $authenticator,
                                       UserAuthenticatorInterface $userAuthenticator,
                                       MailerInterface $mailer,
-                                      AlertServiceInterface $alertService,
-                                      User $user)
+                                      AlertServiceInterface $alertService
+                                      )
     {
         $email = (new Email())
             ->from($this->getParameter('admin_email'))
@@ -88,7 +88,7 @@ class RegistrationController extends AbstractController
             ->text($user->getName() . ' vient de s\'inscrire sur le site');
 
         $mailer->send($email);
-        $alertService->success('Votre compte a bien été créé, vous pouvez vous connecter');
+        $alertService->success('Votre compte a bien été créé, bienvenue parmi nous !');
 
         return $userAuthenticator->authenticateUser(
             $user,

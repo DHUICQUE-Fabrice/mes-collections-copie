@@ -23,6 +23,9 @@ class PetshopType extends AbstractType
             ])
             ->add('biography', TextareaType::class, [
                 'label'=>'Biographie : ',
+                'attr' => [
+                    'rows' => '6',
+                ],
             ])
             ->add('size', EntityType::class,[
                 'class'=>PetshopSize::class,

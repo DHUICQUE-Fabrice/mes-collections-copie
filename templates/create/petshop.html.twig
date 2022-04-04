@@ -7,15 +7,59 @@
 {% block body %}
     <div class="container">
 
+        <div class="card-custom container">
         {{ form_start(form) }}
-            {{ form_widget(form) }}
             <div class="row">
-                <div class="col-4"></div>
-                <div class="col-4">
+                <div class="col-1"></div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="row">
+                        <div class="col-12 rectangle">
+                            <img src="{{ asset('build/images/placeholder_petshop.png') }}" alt="placeholder">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(form.file) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-7">
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(form.name) }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form_row(form.size) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_row(form.species) }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(form.biography) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+            {{ form_widget(form) }}
+        <br>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6">
                     <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
                 </div>
             </div>
         {{ form_end(form) }}
+        <br>
         <p>Si vous pensez qu'il manque des éléments (par exemple espèce animale), n'hésitez pas à passer par le formulaire de <a href="{{ path('contact') }}">Contact</a></p>
 
     </div>

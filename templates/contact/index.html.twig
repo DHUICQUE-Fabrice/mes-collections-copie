@@ -7,6 +7,10 @@
     <h1>Formulaire de contact</h1>
     <p>Si vous avez une question à propos du site, une suggestion d'amélioration, ou tout simplement m'envoyer un message, c'est par ici que ça se passe !</p>
     {{ form_start(form) }}
+    {% if app.user %}
+        {{ form_row(form.name, {name:app.user.name}) }}
+        {{ form_row(form.email, {email:app.user.email}) }}
+    {% endif %}
     {{ form_widget(form) }}
     <br>
     <p>En cliquant sur le bouton "Envoyer" ci-dessous, vous acceptez que votre message et votre adresse email soient conservés et utilisés dans le seul cadre de la demande que vous avez formulée.</p>

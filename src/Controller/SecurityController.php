@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -54,16 +55,19 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/oubli-mot-de-passe", name="app_forgot_password")
-     * @param MailerInterface $mailer
      * @param AlertServiceInterface $alertService
      * @param UserRepository $userRepository
      * @param Request $request
      * @param TokenGeneratorInterface $tokenGenerator
      * @param EntityManagerInterface $entityManager
      * @return Response
-     * @throws TransportExceptionInterface
      */
-    public function recoverPassword(MailerInterface $mailer, AlertServiceInterface $alertService, UserRepository $userRepository, Request $request, TokenGeneratorInterface $tokenGenerator, EntityManagerInterface $entityManager): Response
+    public function recoverPassword(AlertServiceInterface $alertService,
+                                    MailerInterface $mailer,
+                                    UserRepository $userRepository,
+                                    Request $request,
+                                    TokenGeneratorInterface $tokenGenerator,
+                                    EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ForgottenPasswordType::class);
         $form->handleRequest($request);
@@ -84,9 +88,15 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }
             $url = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-            $mailer = new MailjetService($mailer);
-            $mailer->sendEmail('aelhan.dev@gmail.com', $user->getEmail(), 'Réinitialisation du mot de passe', 'Bonjour ' . $user->getName() .  ', vous avez demandé à réinitialiser votre mot de passe sur mes-collections, voici le lien de réinitialisation : ' . $url);
+            $email = (new Email())
+                ->from($this->getParameter('admin_email'))
+                ->to($user->getEmail())
+                ->subject('Réinitialisation de votre mot de passe')
+                ->text('Bonjour ' . $user->getName() .  ', vous avez demandé à réinitialiser votre mot de passe sur mes-collections, voici le lien de réinitialisation : ' . $url);
+
+            $mailer->send($email);
             $alertService->success('Un lien de réinitialisation du mot de passe vous a été envoyé ! (Vérifiez votre dossier spam / courrier indésirable)');
+
             return $this->redirectToRoute('app_login');
         }
         return $this->render('security/recoverPassword.html.twig', ['form' => $form->createView()]);
@@ -115,10 +125,9 @@ class SecurityController extends AbstractController
             $user->setPassword($hasher->hashPassword($user, $request->request->get('password')));
             $entityManager->persist($user);
             $entityManager->flush();
-            $alertService->success('Votre mot de passe a bien été réinitialisé');
+            $alertService->success('Votre mot de passe a bien été réinitialisé, vous pouvez de nouveau vous connecter.');
             return $this->redirectToRoute('app_login');
         }
         return $this->render('security/resetPassword.html.twig', ['token' => $token]);
     }
-
 }
