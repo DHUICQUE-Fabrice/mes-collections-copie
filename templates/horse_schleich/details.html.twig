@@ -4,7 +4,7 @@
 {% endblock %}
 {% block body %}
     {% if app.user == schleich.user %}
-        <a href="{{ path('edit_horseschleich', {id: schleich.id}) }}" class="btn btn-primary">Modifier {{ schleich.name }}</a>
+        <a href="{{ path('edit_horseschleich', {id: schleich.id}) }}" class="btn-primary-custom">Modifier {{ schleich.name }}</a>
     {% endif %}
     <div class="card-flyer">
         <div class="text-box">

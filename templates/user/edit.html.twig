@@ -6,7 +6,7 @@
     <div class="container">
         {{ form_start(userForm) }}
         {{ form_widget(userForm) }}
-        <button type="submit" name="valid" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
+        <button type="submit" name="valid" class="btn-primary-custom" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
         {{ form_end(userForm) }}
             {% if app.user.imageName %}
                 <form action="{{ path('delete_profile_image', {name: app.user.name}) }}" method="post">

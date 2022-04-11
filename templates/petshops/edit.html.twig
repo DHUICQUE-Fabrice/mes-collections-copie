@@ -4,7 +4,7 @@
     <div class="container">
         {{ form_start(petshopForm) }}
         {{ form_widget(petshopForm) }}
-        <button type="submit" class="btn btn-primary" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
+        <button type="submit" class="btn-primary-custom" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
         <a href="{{ path('petshop_details', {slug: petshop.slug}) }}" class="btn btn-primary">Retour</a>
         {{ form_end(petshopForm) }}
             {% if petshop.imageName %}
