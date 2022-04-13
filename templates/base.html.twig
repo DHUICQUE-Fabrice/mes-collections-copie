@@ -21,16 +21,17 @@
 </head>
 <body class="background">
     {% include 'inc/_header.html.twig' %}
-
+    {% if app.request.headers.get('referer') %}
+        <div class="float-end">
+            <img class="btn-back" src="{{ asset('build/images/reply.png') }}" alt="Retour" title="Retour" onclick="window.history.back();">
+        </div>
+    {% endif %}
     <div class="container-fluid">
         {{ include('_flash_message.html.twig') }}
         {% block body %}
         {% endblock %}
     </div>
-    {% if app.request.headers.get('referer') %}
-    <button class="btn-back btn-primary-custom" onclick="window.history.back();">
-        <i class="fas fa-arrow-left"> Retour</i></button>
-    {% endif %}
+
     {% include 'inc/_footer.html.twig' %}
 </body>
 </html>
