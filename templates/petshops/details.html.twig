@@ -14,9 +14,9 @@
                 {% endif %}
             </div>
             <div class="col-8 row text-center">
-                <h4 class="col-12"><b>Nom :</b> {{ petshop.name }}</h4>
-                <h6 class="col-6"><b>Taille :</b> {{ petshop.size }}</h6>
-                <h6 class="col-6"><b>Espèce :</b> {{ petshop.species }}</h6>
+                <h2 class="col-12">{{ petshop.name }}</h2>
+                <p class="col-6"><b>Taille :</b> {{ petshop.size }}</p>
+                <p class="col-6"><b>Espèce :</b> {{ petshop.species }}</p>
                 {% if petshop.biography %}
                     <p class="col-12"><b>A propos de {{ petshop.name }} :</b><br> {{ petshop.biography }}</p>
                 {% else %}

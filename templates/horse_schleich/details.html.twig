@@ -13,10 +13,10 @@
             {% endif %}
         </div>
         <div class="col-8 row text-center">
-            <h4 class="col-12">{{ schleich.name }}</h4>
-            <h6 class="col-6">Robe : {{ schleich.coat }}</h6>
-            <h6 class="col-6">Type : {{ schleich.type }}</h6>
-            <h6 class="col-6">Espèce : {{ schleich.species }}</h6>
+            <h2 class="col-12">{{ schleich.name }}</h2>
+            <p class="col-6"><b>Robe : </b>{{ schleich.coat }}</p>
+            <p class="col-6"><b>Type : </b>{{ schleich.type }}</p>
+            <p class="col-6"><b>Espèce : </b>{{ schleich.species }}</p>
             {% if schleich.biography %}
                 <p class="col-12"><b>A propos de {{ schleich.name }} :</b><br> {{ schleich.biography }}</p>
             {% else %}
