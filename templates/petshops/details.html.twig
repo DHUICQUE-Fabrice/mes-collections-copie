@@ -3,23 +3,39 @@
      | {{ petshop.name }}
 {% endblock %}
 {% block body %}
-    {% if app.user == petshop.user %}
-        <a href="{{ path('edit_petshop', {id: petshop.id}) }}" class="btn-primary-custom">Modifier {{ petshop.name }}</a>
-    {% endif %}
-    <div class="card-flyer">
-        <div class="text-box">
-            <div class="image-box">
+
+    <div class="container">
+        <div class="details-card row">
+            <div class="details-image col-4">
                 {% if petshop.imageName %}
                     <img src="{{ (path_asset_petshop ~ petshop.imageName) | imagine_filter('details') }}" alt="{{ petshop.name }}" width="250"/>
                 {% else %}
                     <img src="{{ asset('build/images/placeholder_petshop.png') }}" alt="{{ petshop.name }}" width="250"/>
                 {% endif %}
             </div>
-            <div class="text-container">
-                <h6>{{ petshop.name }}</h6>
-                <p>{{ petshop.biography }}</p>
+            <div class="col-8 row text-center">
+                <h4 class="col-12"><b>Nom :</b> {{ petshop.name }}</h4>
+                <h6 class="col-6"><b>Taille :</b> {{ petshop.size }}</h6>
+                <h6 class="col-6"><b>Espèce :</b> {{ petshop.species }}</h6>
+                {% if petshop.biography %}
+                    <p class="col-12"><b>A propos de {{ petshop.name }} :</b><br> {{ petshop.biography }}</p>
+                {% else %}
+                    <p class="col-12"><b>A propos de {{ petshop.name }} :</b><br> Aucune description disponible.</p>
+                {% endif %}
+            </div>
+
+
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-10"></div>
+            <div class="col-2">
+                {% if app.user == petshop.user %}
+                    <a href="{{ path('edit_petshop', {id: petshop.id}) }}" class="btn-primary-custom">Modifier {{ petshop.name }}</a>
+                {% endif %}
             </div>
         </div>
+
     </div>
 {% endblock %}
 

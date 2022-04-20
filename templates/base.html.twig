@@ -28,8 +28,11 @@
     {% endif %}
     <div class="container-fluid">
         {{ include('_flash_message.html.twig') }}
-        {% block body %}
-        {% endblock %}
+        <div class="container">
+            {% block body %}
+            {% endblock %}
+        </div>
+
     </div>
 
     {% include 'inc/_footer.html.twig' %}

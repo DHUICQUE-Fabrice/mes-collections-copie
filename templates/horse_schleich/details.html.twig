@@ -3,23 +3,37 @@
      | {{ schleich.name }}
 {% endblock %}
 {% block body %}
+<div class="container">
+    <div class="details-card row">
+        <div class="details-image col-4">
+            {% if schleich.imageName %}
+                <img src="{{ (path_asset_horse_schleich ~ schleich.imageName) | imagine_filter('details') }}" alt="{{ schleich.name }}" width="250"/>
+            {% else %}
+                <img src="{{ asset('build/images/placeholder_horseschleich.png') }}" alt="{{ schleich.name }}" width="250"/>
+            {% endif %}
+        </div>
+        <div class="col-8 row text-center">
+            <h4 class="col-12">{{ schleich.name }}</h4>
+            <h6 class="col-6">Robe : {{ schleich.coat }}</h6>
+            <h6 class="col-6">Type : {{ schleich.type }}</h6>
+            <h6 class="col-6">Espèce : {{ schleich.species }}</h6>
+            {% if schleich.biography %}
+                <p class="col-12"><b>A propos de {{ schleich.name }} :</b><br> {{ schleich.biography }}</p>
+            {% else %}
+                <p class="col-12"><b>A propos de {{ schleich.name }} :</b><br> Aucune description disponible.</p>
+            {% endif %}
+        </div>
+    </div>
+
+<br>
+<div class="row">
+    <div class="col-10"></div>
+    <div class="col-2">
     {% if app.user == schleich.user %}
         <a href="{{ path('edit_horseschleich', {id: schleich.id}) }}" class="btn-primary-custom">Modifier {{ schleich.name }}</a>
     {% endif %}
-    <div class="card-flyer">
-        <div class="text-box">
-            <div class="image-box">
-                {% if schleich.imageName %}
-                <img src="{{ (path_asset_horse_schleich ~ schleich.imageName) | imagine_filter('details') }}" alt="{{ schleich.name }}" width="250"/>
-                {% else %}
-                    <img src="{{ asset('build/images/placeholder_horseschleich.png') }}" alt="{{ schleich.name }}" width="250"/>
-                {% endif %}
-            </div>
-            <div class="text-container">
-                <h6>{{ schleich.name }}</h6>
-                <p>{{ schleich.biography }}</p>
-            </div>
-        </div>
     </div>
+</div>
+</div>
 {% endblock %}
 

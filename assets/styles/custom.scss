@@ -93,16 +93,13 @@ p, footer a, input, textarea{
 }
 
 .image-box-custom, .image-box-custom>a>img{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
   border-radius: 1rem;
 }
 .image-box-custom>a>img{
-  width: 100%;
-  height: 100%;
+  max-width: inherit;
+  max-height: inherit;
   margin: 0.1rem;
 }
 
@@ -324,8 +321,9 @@ a:hover{
   -webkit-transition:all .9s ease;
   -moz-transition:all .9s ease;
   -o-transition:all .9s ease;
-  width: 90%;
+  width: 100%;
   height: 12rem;
+  object-fit: cover;
 }
 #cards_landscape_wrap-2 .card-flyer:hover .image-box img{
   opacity: 0.7;
@@ -379,3 +377,14 @@ a:hover{
   width: 9.5rem;
   height: 9.5rem;
 }
+  .details-card{
+    background-color: #ddd;
+    width: 100%;
+    border-radius: 5rem;
+    padding: 1.5rem 0.5rem;
+  }
+  .details-image img{
+    width: 100%;
+    height: auto;
+    border-radius: 5rem;
+  }
