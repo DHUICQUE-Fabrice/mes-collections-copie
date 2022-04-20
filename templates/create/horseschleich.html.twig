@@ -5,16 +5,59 @@
 
 {% block body %}
     <div class="container">
+        <div class="card-custom container">
+            {{ form_start(horseSchleichForm) }}
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="row">
+                        <div class="col-12 rectangle">
+                            <img src="{{ asset('build/images/placeholder_horseschleich.png') }}" alt="placeholder">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">{{ form_row(horseSchleichForm.file) }}</div>
+                    </div>
+                </div>
+            <div class="col-xs-12 col-md-7">
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        {{ form_row(horseSchleichForm.name) }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-4">
+                        {{ form_row(horseSchleichForm.species) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(horseSchleichForm.type) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(horseSchleichForm.coat) }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        {{ form_row(horseSchleichForm.biography) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
 
-        {{ form_start(horseSchleichForm) }}
         {{ form_widget(horseSchleichForm) }}
         <br>
         <div class="row">
-            <div class="col-4">
+            <div class="col-6"></div>
+            <div class="col-6">
                 <button type="submit" name="valid" class="btn-primary-custom">Valider</button>
             </div>
         </div>
         {{ form_end(horseSchleichForm) }}
+        <br>
         <p>Si vous pensez qu'il manque des éléments (par exemple race ou robe de cheval), n'hésitez pas à passer par le formulaire de <a href="{{ path('contact') }}">Contact</a></p>
 
     </div>

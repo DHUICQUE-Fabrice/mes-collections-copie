@@ -19,12 +19,18 @@ class PetshopType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'=>'Nom : '
+                'label'=>'Nom : ',
+                'attr' => [
+                    'placeholder' => 'Nom',
+                    'class' => 'fonttext',
+                ],
             ])
             ->add('biography', TextareaType::class, [
                 'label'=>'Biographie : ',
                 'attr' => [
                     'rows' => '6',
+                    'placeholder' => 'Biographie',
+                    'class' => 'fonttext',
                 ],
             ])
             ->add('size', EntityType::class,[
@@ -32,18 +38,27 @@ class PetshopType extends AbstractType
                 'choice_label'=>'name',
                 'label'=>'Taille : ',
                 'placeholder'=>'Sélectionnez',
+                'attr' => [
+                    'class' => 'fonttext',
+                ],
             ])
             ->add('species', EntityType::class,[
                 'class'=>PetshopSpecies::class,
                 'choice_label'=>'name',
                 'label'=>'Animal : ',
                 'placeholder'=>'Sélectionnez',
+                'attr' => [
+                    'class' => 'fonttext',
+                ],
             ])
             ->add('file', VichImageType::class, [
                 'label'=>'Veuillez ajouter une photo (facultatif, maximum 1Mo)',
                 'required' => false,
                 'allow_delete' => false,
                 'download_link' => false,
+                'attr' => [
+                    'class' => 'fonttext',
+                ],
             ]);
     }
 

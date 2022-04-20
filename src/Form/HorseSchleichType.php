@@ -24,13 +24,14 @@ class HorseSchleichType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Nom',
                     'class' => 'fonttext',
-                ]
+                ],
             ])
             ->add('biography', TextareaType::class, [
                 'label'=>'Biographie : ',
                 'attr' => [
                     'placeholder' => 'Biographie',
                     'class' => 'fonttext',
+                    'rows' => '6',
                 ],
             ])
             ->add('type', EntityType::class, [
