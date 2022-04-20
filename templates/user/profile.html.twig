@@ -4,32 +4,37 @@
 {% endblock %}
 {% block body %}
     <div class="container">
-        <div class="row">
-            <div class="col-md-4">
+        <div class="details-card row">
+            <div class="details-image col-4">
                 {% if user.imageName %}
                     <img src="{{ (path_asset_image_profile ~ user.imageName) | imagine_filter('details')  }}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
                 {% else %}
                     <img src="{{ asset('build/images/placeholder_avatar.png')}}" alt="{{ user.name }}" title="{{ user.name }}" width="250">
                 {% endif %}
             </div>
-
-            <div class="col-md-8">
-                <h3 class="fonttext">A propos de {{ user.name }} :</h3>
+            <div class="col-8 row text-center">
+                <h2>{{ user.name }}</h2>
+                <p>Membre depuis le {{ user.createdAt | date('d/m/Y') }}</p>
                 {% if user.about %}
-                    <p class="message">{{ user.about | nl2br}}</p>
-                    {% else %}
-                        <p>{{ user.name }} n'a pas rentré de description</p>
-
+                    <p class="col-12"><b>A propos de {{ user.name }} :</b><br><span class="message"> {{ user.about }}</span></p>
+                {% else %}
+                    <p class="col-12"><b>A propos de {{ user.name }} :</b><br><span class="message">Aucune description disponible.</span></p>
                 {% endif %}
+                <div class="row">
+                    {% if user.petshops.count > 0 %}
+                        <div class="col-6"><p>Nombre de Petshops : {{ user.petshops.count }}</p></div>
+                    {% endif %}
+                    {% if user.horseSchleiches.count >0 %}
+                        <div class="col-6"><p>Nombre de Schleichs : {{ user.horseSchleiches.count }}</p></div>
+                    {% endif %}
+                </div>
             </div>
-
-    <div class="row">
-        <p class="text-center">{{ user.name }} est membre depuis le {{ user.createdAt | date('d/m/Y')}}, il a {{ user.petshops.count }} petshops et {{ user.horseSchleiches.count }} chevaux Schleich, les voici :</p>
-
+        </div>
     </div>
+
         </div>
         </div>
-    <div id="custom-main-cards">
+    <div id="cards_landscape_wrap-2">
     <div class="container">
         <div class="row">
             {% for item in items %}
@@ -40,10 +45,12 @@
                     {% endif %}
                 {% include 'inc/_cards.html.twig' %}
             {% endfor %}
+            {% if app.user == user %}
                 {% include 'inc/_card_add_new_item.html.twig' %}
+            {% endif %}
         </div>
     </div>
-</div>
+
     {% if app.user == user %}
         <form action="{{ path('editProfile', {name: user.name}) }}">
             <button type="submit" name="edit" class="btn btn-primary btn-right">Modifier mon profil</button>
