@@ -1,20 +1,53 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 class="text-center">Bonjour {{ app.user.name }}, ici vous pouvez modifier vos informations</h1>
-    <br>
     <div class="container">
-        {{ form_start(userForm) }}
-        {{ form_widget(userForm) }}
-        <button type="submit" name="valid" class="btn-primary-custom" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
+        <div class="card-custom">
+            {{ form_start(userForm) }}
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                    <div class="row">
+                        <div class="col-12 rectangle">
+                            {% if app.user.imageName %}
+                            <img src="{{ (path_asset_image_profile ~ app.user.imageName) | imagine_filter('details') }}" alt="{{ app.user.name }}" width="250"/>
+                            {% else %}
+                            <img src="{{ asset('build/images/placeholder_avatar.png') }}" alt="{{ app.user.name }}" width="250"/>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            {{  form_row(userForm.file) }}
+                            {% if app.user.imageName %}
+                            <input type="hidden" name="token" value="{{ csrf_token('delete-image' ~ app.user.id) }}">
+                            <button formaction="{{ path('delete_profile_image', {name: app.user.name}) }}" type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')">Supprimer l'image</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-7">
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(userForm.name) }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(userForm.email) }}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="col-12">
+                            {{ form_row(userForm.about) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn-primary-custom" onclick="this.form.submit();this.value='Enregistrement...';this.disabled=true;">Valider</button>
         {{ form_end(userForm) }}
-            {% if app.user.imageName %}
-                <form action="{{ path('delete_profile_image', {name: app.user.name}) }}" method="post">
-                    <input type="hidden" name="token" value="{{ csrf_token('delete-image' ~ app.user.id) }}">
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')">Supprimer l'image</button>
-                </form>
-            {% endif %}
-
     </div>
     <p class="text-center">Pour modifier votre mot de passe, veuillez utiliser le lien "Mot de passe oublié" sur la page de connexion.</p>
 {% endblock %}

@@ -28,6 +28,7 @@ class HorseSchleichType extends AbstractType
             ])
             ->add('biography', TextareaType::class, [
                 'label'=>'Biographie : ',
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'Biographie',
                     'class' => 'fonttext',
@@ -66,6 +67,7 @@ class HorseSchleichType extends AbstractType
                 'required' => false,
                 'allow_delete' => false,
                 'download_link' => false,
+                'image_uri' => false,
                 'attr' => [
                     'class' => 'fonttext',
                 ],

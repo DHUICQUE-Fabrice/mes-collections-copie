@@ -2,17 +2,58 @@
 
 {% block body %}
     <div class="container">
-        {{ form_start(petshopForm) }}
-        {{ form_widget(petshopForm) }}
-        <button type="submit" class="btn-primary-custom" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
-        <a href="{{ path('petshop_details', {slug: petshop.slug}) }}" class="btn btn-primary">Retour</a>
+        <div class="card-custom">
+            {{ form_start(petshopForm) }}
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                    <div class="row">
+                        <div class="col-12 rectangle">
+
+                            {% if petshop.imageName %}
+                                <img src="{{ (path_asset_petshop ~ petshop.imageName) | imagine_filter('details') }}" alt="{{ petshop.name }}" width="250"/>
+                            {% else %}
+                                <img src="{{ asset('build/images/placeholder_petshop.png') }}" alt="{{ petshop.name }}" width="250"/>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(petshopForm.file) }}
+                            {% if petshop.imageName %}
+                                    <input type="hidden" name="token" value="{{ csrf_token('delete-image' ~ petshop.id) }}">
+                                    <button formaction="{{  path('delete_petshop_image', {id: petshop.id}) }}" type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')">Supprimer l'image</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-7">
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(petshopForm.name) }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form_row(petshopForm.size) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_row(petshopForm.species) }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(petshopForm.biography) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn-primary-custom" onclick="this.form.submit();this.value='Enregistrement...';this.disabled=true;">Valider</button>
         {{ form_end(petshopForm) }}
-            {% if petshop.imageName %}
-                <form action="{{ path('delete_petshop_image', {id: petshop.id}) }}" method="post">
-                    <input type="hidden" name="token" value="{{ csrf_token('delete-image' ~ petshop.id) }}">
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')">Supprimer l'image</button>
-                </form>
-            {% endif %}
+
                 <form action="{{ path('delete_petshop', {id: petshop.id}) }}" method="post">
                     <input type="hidden" name="token" value="{{ csrf_token('delete-petshop' ~ petshop.id) }}">
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer {{ petshop.name }} ? Ceci sera définitif !')">Supprimer

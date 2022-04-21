@@ -150,6 +150,7 @@ class PetshopsController extends AbstractController
     {
         /** @var $user User */
         $user = $this->getUser();
+
         $this->denyAccessUnlessGranted('delete', $petshop);
         $name = $petshop->getName();
 

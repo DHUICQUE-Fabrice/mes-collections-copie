@@ -21,6 +21,7 @@ class UserType extends AbstractType
             ->add('email')
             ->add('about', TextareaType::class, [
                 'label' => "A propos de moi",
+                'required' => false,
                 'attr' => array(
                     'placeholder' => 'J\'adore collectionner !',
                     'rows' => 5,
@@ -29,6 +30,7 @@ class UserType extends AbstractType
             ->add('file', VichImageType::class, [
                 'label'=>'Veuillez ajouter une photo (facultatif, maximum 1Mo)',
                 'required' => false,
+                'image_uri' => false,
                 'allow_delete' => false,
                 'download_link' => false,
             ]);

@@ -27,6 +27,7 @@ class PetshopType extends AbstractType
             ])
             ->add('biography', TextareaType::class, [
                 'label'=>'Biographie : ',
+                'required' => false,
                 'attr' => [
                     'rows' => '6',
                     'placeholder' => 'Biographie',
@@ -55,8 +56,10 @@ class PetshopType extends AbstractType
                 'label'=>'Veuillez ajouter une photo (facultatif, maximum 1Mo)',
                 'required' => false,
                 'allow_delete' => false,
+                'image_uri' => false,
                 'download_link' => false,
                 'attr' => [
+                    'src' => '',
                     'class' => 'fonttext',
                 ],
             ]);

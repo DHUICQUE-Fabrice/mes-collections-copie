@@ -2,25 +2,63 @@
 
 {% block body %}
     <div class="container">
-
-        {{ form_start(horseSchleichForm) }}
-        {{ form_widget(horseSchleichForm) }}
-        <button type="submit" class="btn-primary-custom" onclick="this.disabled=true;this.value='Enregistrement...';this.form.submit()">Valider</button>
-        <a href="{{ path('horse_schleich_details', {slug: horseSchleich.slug}) }}" class="btn btn-primary">Retour</a>
+        <div class="card-custom">
+            {{ form_start(horseSchleichForm) }}
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                    <div class="row">
+                        <div class="col-12 rectangle">
+                            {% if horseSchleich.imageName %}
+                                <img src="{{ (path_asset_horse_schleich ~ horseSchleich.imageName) | imagine_filter('details') }}" alt="{{ horseSchleich.name }}" width="250"/>
+                            {% else %}
+                                <img src="{{ asset('build/images/placeholder_horseschleich.png') }}" alt="{{ horseSchleich.name }}" width="250"/>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(horseSchleichForm.file) }}
+                            {% if horseSchleich.imageName %}
+                            <input type="hidden" name="token" value="{{ csrf_token('delete-image' ~ horseSchleich.id) }}">
+                            <button formaction="{{ path('delete_horse_schleich_image', {id: horseSchleich.id}) }}" type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')">Supprimer l'image</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-7">
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(horseSchleichForm.name) }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            {{ form_row(horseSchleichForm.species)}}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(horseSchleichForm.type)}}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(horseSchleichForm.coat)}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(horseSchleichForm.biography)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn-primary-custom" onclick="this.form.submit();this.value='Enregistrement...';this.disabled=true;">Valider</button>
         {{ form_end(horseSchleichForm) }}
-            {% if horseSchleich.imageName %}
-                <form action="{{  path('delete_horse_schleich_image', {id: horseSchleich.id}) }}" method="post">
-                    <input type="hidden" name="token" value="{{ csrf_token('delete-image' ~ horseSchleich.id) }}">
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')">Supprimer l'image</button>
-                </form>
-            {% endif %}
-                <form action="{{ path('delete_horse_schleich', {id: horseSchleich.id}) }}" method="post">
-                    <input type="hidden" name="token" value="{{ csrf_token('delete-horse-schleich' ~ horseSchleich.id) }}">
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer {{ horseSchleich.name }} ? Ceci sera définitif !')">Supprimer {{ horseSchleich.name }}</button>
-                </form>
-
-
-
+        <form action="{{ path('delete_horse_schleich', {id: horseSchleich.id}) }}" method="post">
+            <input type="hidden" name="token" value="{{ csrf_token('delete-horse-schleich' ~ horseSchleich.id) }}">
+            <button type="submit" class="btn-danger-custom" onclick="return confirm('Êtes-vous sûr de vouloir supprimer {{ horseSchleich.name }} ? Ceci sera définitif !')">Supprimer {{ horseSchleich.name }}</button>
+        </form>
     </div>
 {% endblock %}
 

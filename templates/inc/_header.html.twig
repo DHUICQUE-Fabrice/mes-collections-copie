@@ -16,7 +16,7 @@
             {% endif %}
             <div class="col-2">
                 {% if app.user %}
-                <a href="/" class="text-center d-block nav-link" >{{ app.user.name }}</a>
+                <a href="{{  path('profile', {'name' : app.user.name}) }}" class="text-center d-block nav-link" >{{ app.user.name }}</a>
                 {% endif %}
                 <a href="#" class="text-center d-block dropdown-toggle link-secondary text-decoration-none" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-user-circle" style="font-size: 3rem"></i>
