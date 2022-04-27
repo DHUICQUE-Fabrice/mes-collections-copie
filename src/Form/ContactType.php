@@ -53,6 +53,7 @@ class ContactType extends AbstractType
             'label'=>'Votre message : ',
             'attr'=>[
                 'rows'=>'10',
+                'placeholder'=>'Votre message',
             ]
         ]);
 

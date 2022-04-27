@@ -36,7 +36,7 @@ class ObjectFamily
      */
     private Collection $horseSchleich;
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->petshop = new ArrayCollection();
         $this->horseSchleich = new ArrayCollection();

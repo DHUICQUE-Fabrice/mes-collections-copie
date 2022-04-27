@@ -14,9 +14,18 @@
                 {% endif %}
             </div>
             <div class="col-8 row text-center">
-                <h2 class="col-12">{{ petshop.name }}</h2>
+                <h2 class="col-12 custom-i-color">{{ petshop.name }}</h2>
                 <p class="col-6"><b>Taille :</b> {{ petshop.size }}</p>
                 <p class="col-6"><b>Espèce :</b> {{ petshop.species }}</p>
+                {% if app.user != petshop.user %}
+                    {% if app.user %}
+                        <p class="col-6"><b>Propriétaire :</b>
+                            <a href="{{ path('profile', {name: petshop.user.name}) }}" title="{{ petshop.user.name }}">{{ petshop.user.name }}</a>
+                        </p>
+                    {% else %}
+                        <p class="col-6"><b>Propriétaire :</b> {{ petshop.user.name }}</p>
+                    {% endif %}
+                {% endif %}
                 {% if petshop.biography %}
                     <p class="col-12"><b>A propos de {{ petshop.name }} :</b><br> {{ petshop.biography }}</p>
                 {% else %}

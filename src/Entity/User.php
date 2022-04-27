@@ -41,9 +41,9 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
 
     /**
      * @ORM\Column(type="json")
-     * @var array|ArrayCollection
+     * @var array
      */
-    private array|ArrayCollection $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -88,7 +88,7 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
      */
     private ?string $resetToken;
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->petshops = new ArrayCollection();
         $this->horseSchleiches = new ArrayCollection();
@@ -141,7 +141,7 @@ class User extends AbstractImageFile implements UserInterface, PasswordAuthentic
     /**
      * @see UserInterface
      */
-    public function getRoles(): array|ArrayCollection
+    public function getRoles(): array
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER

@@ -32,7 +32,7 @@ class PetshopSize
      */
     private Collection $petshops;
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->petshops = new ArrayCollection();
     }

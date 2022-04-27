@@ -4,26 +4,34 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="text-center">Créer un compte</h1>
+
     <div class="container">
+
+        <h1 class="row">Créer un compte</h1>
         <div class="row">
-        <div class="col-2"></div>
-<div class="col-8">
-    <br>
-    {{ form_start(registrationForm) }}
-    {{ form_row(registrationForm.name) }}<br>
-    {{ form_row(registrationForm.email) }}<br>
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe : '
-        }) }}<br>
+            <div class="col-3"></div>
+
+            <div class="col-6">
+            <br>
+            {{ form_start(registrationForm, ) }}
+            {{ form_row(registrationForm.name) }}<br>
+            {{ form_row(registrationForm.email) }}<br>
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Mot de passe : '
+                }) }}<br>
+
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" name="agreeTerms" required>
+            J'accepte les <a href="{{ path('app_cgu') }}">conditions générales d'utilisation</a>
+        </label>
+    </div>
 
 
-    {{ form_row(registrationForm.agreeTerms, { label: 'Je reconnais avoir lu et compris les CGU et je les accepte.'}) }}
-    <a href="{{ path('app_cgu') }}">Consulter les CGU</a>
     <br>
     <br>
 
-        <button type="submit" class="btn-primary-custom">Créer un compte</button>
+        <button type="submit" class="btn-primary-custom col-2 float-end"><i class="fas fa-check valid-button"></i></button>
     {{ form_end(registrationForm) }}
 </div></div></div>
 {% endblock %}

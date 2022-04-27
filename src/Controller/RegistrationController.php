@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
 use App\Service\AlertServiceInterface;
-use App\Service\MailjetService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +25,14 @@ class RegistrationController extends AbstractController
      * @param Request $request
      * @param UserPasswordHasherInterface $userPasswordHasher
      * @param EntityManagerInterface $entityManager
+     * @param AlertServiceInterface $alertService
      * @return Response
      */
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
+        AlertServiceInterface $alertService
     ): Response
     {
         $user = new User();
@@ -41,6 +42,12 @@ class RegistrationController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($request->request->get('agreeTerms') !== 'on') {
+                $alertService->warning('Vous devez accepter les Conditions Générales d\'Utilisation');
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
+            }
             // encode the plain password
             $user->setPassword(
             $userPasswordHasher->hashPassword(
@@ -79,7 +86,7 @@ class RegistrationController extends AbstractController
                                       UserAuthenticatorInterface $userAuthenticator,
                                       MailerInterface $mailer,
                                       AlertServiceInterface $alertService
-                                      )
+                                      ): ?Response
     {
         $email = (new Email())
             ->from($this->getParameter('admin_email'))

@@ -223,7 +223,7 @@ class HorseSchleich extends AbstractImageFile
     /**
      * @return string
      */
-    #[Pure] public function __toString()
+    public function __toString()
     {
         return $this->getName();
     }

@@ -33,7 +33,7 @@ class HorseCoat
      */
     private Collection $horseSchleiches;
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->horseSchleiches = new ArrayCollection();
     }
